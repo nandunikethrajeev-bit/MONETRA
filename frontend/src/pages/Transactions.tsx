@@ -233,3 +233,4 @@ export const Transactions: React.FC = () => {
     </div>
   );
 };
+

@@ -193,3 +193,4 @@ export const CreateBudgetModal: React.FC<CreateBudgetModalProps> = ({
     </div>
   );
 };
+

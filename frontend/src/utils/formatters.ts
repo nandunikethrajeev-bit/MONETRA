@@ -37,3 +37,4 @@ export function formatDate(dateStr: string | Date | undefined): string {
     year: 'numeric'
   });
 }
+

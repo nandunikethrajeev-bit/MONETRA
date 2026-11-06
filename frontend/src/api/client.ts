@@ -394,3 +394,4 @@ export const REFERENCE_REPORTS_BREAKDOWN = [
   { category: 'Shopping', amount: 9240, percentage: 14, icon: 'shopping-bag', color: '#EC4899' },
   { category: 'Others', amount: 15360, percentage: 24, icon: 'layers', color: '#8B5CF6' },
 ];
+

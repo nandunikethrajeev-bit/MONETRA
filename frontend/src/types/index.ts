@@ -82,3 +82,4 @@ export interface DashboardSummary {
   expensesTrend?: number;
   savingsTrend?: number;
 }
+
