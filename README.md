@@ -6,8 +6,20 @@
 [![FlatLaf](https://img.shields.io/badge/FlatLaf-Dark%20Charcoal%20%26%20Warm%20Gold-gold.svg)](https://www.formdev.com/flatlaf/)
 [![JFreeChart](https://img.shields.io/badge/JFreeChart-1.5.4-red.svg)](https://www.jfree.org/jfreechart/)
 [![License](https://img.shields.io/badge/License-Academic%20%2F%20MIT-lightgrey.svg)]()
+[![Railway Deployment](https://img.shields.io/badge/Railway-Live%20Production-green.svg)](https://monetra-api-production.up.railway.app/health)
 
 > **MONETRA** is a complete, production-grade Java personal finance management application featuring a modular multi-module Maven architecture, secure REST API, and a Java Swing desktop interface. Both clients share the core business service layer and financial calculations with `BigDecimal` precision.
+
+---
+
+## 🌐 Live Production Cloud Deployment (Railway)
+
+MONETRA REST API is deployed and actively running on Railway with a managed MySQL 8.4 instance:
+
+- **Public Production Base URL**: [https://monetra-api-production.up.railway.app](https://monetra-api-production.up.railway.app)
+- **Live Health Status & DB Connectivity**: [https://monetra-api-production.up.railway.app/health](https://monetra-api-production.up.railway.app/health)
+- **Live Interactive Swagger UI**: [https://monetra-api-production.up.railway.app/swagger-ui.html](https://monetra-api-production.up.railway.app/swagger-ui.html)
+- **OpenAPI 3 Specification**: [https://monetra-api-production.up.railway.app/v3/api-docs](https://monetra-api-production.up.railway.app/v3/api-docs)
 
 ---
 

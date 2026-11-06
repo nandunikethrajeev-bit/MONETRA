@@ -41,7 +41,32 @@ public class DatabaseConfig {
         String envUser = System.getenv("DB_USERNAME") != null ? System.getenv("DB_USERNAME") : System.getenv("DB_USER");
         String envPass = System.getenv("DB_PASSWORD");
 
+        // Railway / Cloud Environment Variables Fallback
+        String railwayHost = System.getenv("MYSQLHOST");
+        String railwayPort = System.getenv("MYSQLPORT");
+        String railwayDb = System.getenv("MYSQLDATABASE");
+        String railwayUser = System.getenv("MYSQLUSER");
+        String railwayPass = System.getenv("MYSQLPASSWORD");
+        String railwayUrl = System.getenv("MYSQL_URL");
+
+        if (envUrl == null && railwayUrl != null && !railwayUrl.trim().isEmpty()) {
+            envUrl = railwayUrl.startsWith("mysql://") ? "jdbc:" + railwayUrl : railwayUrl;
+        } else if (envUrl == null && railwayHost != null && railwayPort != null && railwayDb != null) {
+            envUrl = String.format("jdbc:mysql://%s:%s/%s?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC",
+                    railwayHost, railwayPort, railwayDb);
+        }
+
+        if (envUser == null && railwayUser != null) {
+            envUser = railwayUser;
+        }
+        if (envPass == null && railwayPass != null) {
+            envPass = railwayPass;
+        }
+
         String targetUrl = envUrl != null ? envUrl : configuredUrl;
+        if (targetUrl != null && targetUrl.startsWith("mysql://")) {
+            targetUrl = "jdbc:" + targetUrl;
+        }
         String targetUser = envUser != null ? envUser : configuredUsername;
         String targetPass = envPass != null ? envPass : configuredPassword;
 
