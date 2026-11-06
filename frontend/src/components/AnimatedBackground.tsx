@@ -199,14 +199,32 @@ export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
                 fill="url(#midFacetShadow)"
               />
 
-              {/* Illuminated Crest Rim Lines */}
+              {/* Illuminated Crest Rim Lines & Facet Edges */}
               <path
                 d="M140,290 L280,420 L380,330 M680,240 L820,380 L940,300 M1250,280 L1370,360"
                 fill="none"
                 stroke="#10B981"
-                strokeOpacity="0.32"
+                strokeOpacity="0.38"
                 strokeWidth="1.5"
               />
+              {/* Geometric Facet Wireframe Accents (Low-Poly Mountain Styling) */}
+              <path
+                d="M0,480 L140,290 L360,420 L520,310 L680,240 L860,350 L1040,280 L1250,280 L1440,380"
+                fill="none"
+                stroke="#00E676"
+                strokeOpacity="0.25"
+                strokeWidth="1.2"
+              />
+              <path
+                d="M520,310 L680,240 L820,380 L940,300 L1100,370"
+                fill="none"
+                stroke="#4EFA94"
+                strokeOpacity="0.3"
+                strokeWidth="1.2"
+              />
+              {/* Luminous Alpine Peak Star Point */}
+              <circle cx="520" cy="310" r="3" fill="#4EFA94" opacity="0.8" />
+              <circle cx="520" cy="310" r="8" fill="#00C853" opacity="0.3" />
             </g>
 
             {/* MID-VALLEY DRIFTING MIST OVERLAY */}

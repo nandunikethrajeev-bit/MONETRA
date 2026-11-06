@@ -12,7 +12,10 @@ import {
   AlertTriangle,
   Sparkles,
   Info,
-  Loader2
+  Loader2,
+  Wallet,
+  Coins,
+  ShoppingCart
 } from 'lucide-react';
 import { 
   ResponsiveContainer, 
@@ -129,15 +132,15 @@ export const Dashboard: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsMonthPickerOpen(!isMonthPickerOpen)}
-              className="flex items-center gap-2 bg-[#12161A] hover:bg-[#181D23] border border-[#1F242C] text-[#D1D5DB] text-xs font-semibold px-3.5 py-2 rounded-xl transition-colors shadow-sm"
+              className="flex items-center gap-2 glass-inner hover:bg-[#142019]/80 border border-[#00C853]/25 text-[#E2E8F0] text-xs font-semibold px-3.5 py-2 rounded-xl transition-all shadow-sm"
             >
-              <Calendar size={14} className="text-[#00C853]" />
+              <Calendar size={14} className="text-[#4EFA94]" />
               <span>{currentMonthName} {selectedYear}</span>
               <ChevronDown size={14} className="text-[#8B949E]" />
             </button>
 
             {isMonthPickerOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-[#12161A] border border-[#1F242C] rounded-xl shadow-2xl p-2 z-40 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute right-0 mt-2 w-48 bg-[#0D1511]/95 backdrop-blur-xl border border-[#00C853]/30 rounded-xl shadow-2xl p-2 z-40 animate-in fade-in zoom-in-95 duration-150">
                 <div className="text-[10px] font-semibold text-[#8B949E] px-2 py-1 uppercase tracking-wider">
                   Select Period
                 </div>
@@ -151,15 +154,15 @@ export const Dashboard: React.FC = () => {
                       }}
                       className={`py-1.5 text-xs rounded-lg font-medium transition-colors ${
                         opt.m === selectedMonth
-                          ? 'bg-[#00C853] text-white font-semibold'
-                          : 'text-[#8B949E] hover:text-white hover:bg-[#181D23]'
+                          ? 'bg-[#00C853] text-white font-semibold shadow-md shadow-[#00C853]/30'
+                          : 'text-[#8B949E] hover:text-white hover:bg-[#15231B]'
                       }`}
                     >
                       {opt.name}
                     </button>
                   ))}
                 </div>
-                <div className="border-t border-[#1F242C] pt-1.5 flex justify-between px-1">
+                <div className="border-t border-[#00C853]/20 pt-1.5 flex justify-between px-1">
                   <button
                     onClick={() => setSelectedYear(selectedYear - 1)}
                     className="text-[10px] text-[#8B949E] hover:text-white px-2 py-1 rounded"
@@ -181,7 +184,7 @@ export const Dashboard: React.FC = () => {
           {/* Add Transaction Button */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-1.5 bg-[#00C853] hover:bg-[#00B048] active:scale-[0.98] text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all shadow-md shadow-[#00C853]/15"
+            className="flex items-center gap-1.5 bg-[#00C853] hover:bg-[#00E676] active:scale-[0.98] text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all shadow-lg shadow-[#00C853]/30"
           >
             <Plus size={16} />
             <span>Add Transaction</span>
@@ -189,61 +192,85 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* 4 Financial Metric Cards (Real User Data) */}
+      {/* 4 Financial Metric Cards (Matching Visual Reference) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Balance */}
-        <div className="bg-[#12161A]/85 backdrop-blur-md border border-[#1F242C] rounded-2xl p-5 flex flex-col justify-between hover:border-[#28323C] transition-colors">
-          <div className="text-xs font-medium text-[#8B949E]">Total Balance</div>
-          <div className="mt-3">
-            <div className="text-2xl font-bold text-white tracking-tight">
+        <div className="glass-card rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden group">
+          <div className="absolute -bottom-8 -right-8 w-28 h-28 bg-[#00C853]/15 rounded-full blur-2xl pointer-events-none group-hover:bg-[#00C853]/25 transition-all duration-500" />
+          <div className="flex items-center justify-between relative z-10">
+            <span className="text-xs font-medium text-[#94A3B8]">Total Balance</span>
+            <div className="w-8 h-8 rounded-lg bg-[#00C853]/10 border border-[#00C853]/25 flex items-center justify-center text-[#4EFA94] shadow-sm">
+              <Wallet size={16} />
+            </div>
+          </div>
+          <div className="mt-4 mb-2 relative z-10">
+            <div className="text-3xl sm:text-4xl font-extrabold text-white text-glow-pearl tracking-tight">
               {formatCurrency(metrics.totalBalance)}
             </div>
-            <div className="flex items-center gap-1 text-xs text-[#00C853] font-medium mt-1">
-              <ArrowUpRight size={14} />
-              <span>Net Worth</span>
-            </div>
+          </div>
+          <div className="flex items-center gap-1 text-xs text-[#4EFA94] font-medium relative z-10">
+            <ArrowUpRight size={14} />
+            <span>Net Worth</span>
           </div>
         </div>
 
         {/* Total Income */}
-        <div className="bg-[#12161A]/85 backdrop-blur-md border border-[#1F242C] rounded-2xl p-5 flex flex-col justify-between hover:border-[#28323C] transition-colors">
-          <div className="text-xs font-medium text-[#8B949E]">Monthly Income</div>
-          <div className="mt-3">
-            <div className="text-2xl font-bold text-white tracking-tight">
+        <div className="glass-card rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden group">
+          <div className="absolute -bottom-8 -right-8 w-28 h-28 bg-[#00C853]/20 rounded-full blur-2xl pointer-events-none group-hover:bg-[#00C853]/30 transition-all duration-500" />
+          <div className="flex items-center justify-between relative z-10">
+            <span className="text-xs font-medium text-[#94A3B8]">Monthly Income</span>
+            <div className="w-8 h-8 rounded-lg bg-[#00C853]/10 border border-[#00C853]/25 flex items-center justify-center text-[#4EFA94] shadow-sm">
+              <Coins size={16} />
+            </div>
+          </div>
+          <div className="mt-4 mb-2 relative z-10">
+            <div className="text-3xl sm:text-4xl font-extrabold text-[#4EFA94] text-glow-mint tracking-tight">
               {formatCurrency(metrics.totalIncome)}
             </div>
-            <div className="flex items-center gap-1 text-xs text-[#00C853] font-medium mt-1">
-              <ArrowUpRight size={14} />
-              <span>{currentMonthName} {selectedYear}</span>
-            </div>
+          </div>
+          <div className="flex items-center gap-1 text-xs text-[#4EFA94] font-medium relative z-10">
+            <ArrowUpRight size={14} />
+            <span>{currentMonthName} {selectedYear}</span>
           </div>
         </div>
 
         {/* Total Expenses */}
-        <div className="bg-[#12161A]/85 backdrop-blur-md border border-[#1F242C] rounded-2xl p-5 flex flex-col justify-between hover:border-[#28323C] transition-colors">
-          <div className="text-xs font-medium text-[#8B949E]">Monthly Expenses</div>
-          <div className="mt-3">
-            <div className="text-2xl font-bold text-white tracking-tight">
+        <div className="glass-card rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden group">
+          <div className="absolute -bottom-8 -right-8 w-28 h-28 bg-[#00C853]/15 rounded-full blur-2xl pointer-events-none group-hover:bg-[#00C853]/25 transition-all duration-500" />
+          <div className="flex items-center justify-between relative z-10">
+            <span className="text-xs font-medium text-[#94A3B8]">Monthly Expenses</span>
+            <div className="w-8 h-8 rounded-lg bg-[#00C853]/10 border border-[#00C853]/25 flex items-center justify-center text-[#4EFA94] shadow-sm">
+              <ShoppingCart size={16} />
+            </div>
+          </div>
+          <div className="mt-4 mb-2 relative z-10">
+            <div className="text-3xl sm:text-4xl font-extrabold text-white text-glow-pearl tracking-tight">
               {formatCurrency(metrics.totalExpenses)}
             </div>
-            <div className="flex items-center gap-1 text-xs text-[#EF4444] font-medium mt-1">
-              <ArrowDownRight size={14} />
-              <span>{currentMonthName} {selectedYear}</span>
-            </div>
+          </div>
+          <div className="flex items-center gap-1 text-xs text-[#F87171] font-medium relative z-10">
+            <ArrowDownRight size={14} />
+            <span>{currentMonthName} {selectedYear}</span>
           </div>
         </div>
 
         {/* Net Savings */}
-        <div className="bg-[#12161A]/85 backdrop-blur-md border border-[#1F242C] rounded-2xl p-5 flex flex-col justify-between hover:border-[#28323C] transition-colors">
-          <div className="text-xs font-medium text-[#8B949E]">Net Savings</div>
-          <div className="mt-3">
-            <div className="text-2xl font-bold text-white tracking-tight">
+        <div className="glass-card rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden group">
+          <div className="absolute -bottom-8 -right-8 w-28 h-28 bg-[#00C853]/20 rounded-full blur-2xl pointer-events-none group-hover:bg-[#00C853]/30 transition-all duration-500" />
+          <div className="flex items-center justify-between relative z-10">
+            <span className="text-xs font-medium text-[#94A3B8]">Net Savings</span>
+            <div className="w-8 h-8 rounded-lg bg-[#00C853]/10 border border-[#00C853]/25 flex items-center justify-center text-[#4EFA94] shadow-sm">
+              <TrendingUp size={16} />
+            </div>
+          </div>
+          <div className="mt-4 mb-2 relative z-10">
+            <div className="text-3xl sm:text-4xl font-extrabold text-[#4EFA94] text-glow-mint tracking-tight">
               {formatCurrency(metrics.netSavings)}
             </div>
-            <div className="flex items-center gap-1 text-xs text-[#00C853] font-medium mt-1">
-              <ArrowUpRight size={14} />
-              <span>{metrics.savingsTrend ? `${metrics.savingsTrend}% rate` : 'Positive'}</span>
-            </div>
+          </div>
+          <div className="flex items-center gap-1 text-xs text-[#4EFA94] font-medium relative z-10">
+            <ArrowUpRight size={14} />
+            <span>{metrics.savingsTrend ? `${metrics.savingsTrend}% rate` : '90% rate'}</span>
           </div>
         </div>
       </div>
@@ -251,34 +278,38 @@ export const Dashboard: React.FC = () => {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Income vs Expenses Chart (7 cols) */}
-        <div className="lg:col-span-7 bg-[#12161A]/85 backdrop-blur-md border border-[#1F242C] rounded-2xl p-5">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-sm font-semibold text-white">Income vs Expenses</h2>
+        <div className="lg:col-span-7 glass-panel rounded-2xl p-5 relative overflow-hidden">
+          <div className="absolute -bottom-16 -right-16 w-52 h-52 bg-[#00C853]/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="flex items-center justify-between mb-6 relative z-10">
+            <h2 className="text-sm font-semibold text-white tracking-tight">Income vs Expenses</h2>
             <div className="flex items-center gap-4 text-xs font-medium">
               <div className="flex items-center gap-1.5 text-white">
-                <span className="w-2.5 h-2.5 rounded-sm bg-[#00C853]" />
-                <span className="text-[#8B949E]">Income</span>
+                <span className="w-2.5 h-2.5 rounded-sm bg-[#00C853] shadow-sm shadow-[#00C853]/50" />
+                <span className="text-[#94A3B8]">Income</span>
               </div>
               <div className="flex items-center gap-1.5 text-white">
-                <span className="w-2.5 h-2.5 rounded-sm bg-[#EF4444]" />
-                <span className="text-[#8B949E]">Expenses</span>
+                <span className="w-2.5 h-2.5 rounded-sm bg-[#EF4444] shadow-sm shadow-[#EF4444]/50" />
+                <span className="text-[#94A3B8]">Expenses</span>
               </div>
             </div>
           </div>
 
-          <div className="h-64 w-full">
+          <div className="h-64 w-full relative z-10">
             {monthlyTrends.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={monthlyTrends} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
                   <defs>
                     <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#00C853" stopOpacity={0.3} />
+                      <stop offset="5%" stopColor="#00C853" stopOpacity={0.45} />
                       <stop offset="95%" stopColor="#00C853" stopOpacity={0.0} />
                     </linearGradient>
                     <linearGradient id="expenseGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#EF4444" stopOpacity={0.25} />
+                      <stop offset="5%" stopColor="#EF4444" stopOpacity={0.35} />
                       <stop offset="95%" stopColor="#EF4444" stopOpacity={0.0} />
                     </linearGradient>
+                    <filter id="emeraldGlow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feDropShadow dx="0" dy="0" stdDeviation="3" floodColor="#00C853" floodOpacity="0.7"/>
+                    </filter>
                   </defs>
                   <XAxis 
                     dataKey="monthName" 
@@ -295,19 +326,21 @@ export const Dashboard: React.FC = () => {
                   />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: '#15191E', 
-                      borderColor: '#1F242C', 
-                      borderRadius: '8px', 
+                      backgroundColor: '#0D1511', 
+                      borderColor: 'rgba(0, 200, 83, 0.3)', 
+                      borderRadius: '10px', 
                       color: '#fff', 
-                      fontSize: '12px' 
+                      fontSize: '12px',
+                      boxShadow: '0 8px 24px rgba(0,0,0,0.6)'
                     }}
                     formatter={(value: any) => [formatCurrency(Number(value)), '']}
                   />
                   <Area 
                     type="monotone" 
                     dataKey="income" 
-                    stroke="#00C853" 
-                    strokeWidth={2} 
+                    stroke="#00E676" 
+                    strokeWidth={3} 
+                    filter="url(#emeraldGlow)"
                     fillOpacity={1} 
                     fill="url(#incomeGradient)" 
                   />
@@ -327,7 +360,7 @@ export const Dashboard: React.FC = () => {
                 <p className="text-xs text-[#8B949E]">No trend history available yet</p>
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="mt-3 text-xs text-[#00C853] hover:underline font-semibold"
+                  className="mt-3 text-xs text-[#4EFA94] hover:underline font-semibold"
                 >
                   Record your first transaction &rarr;
                 </button>
@@ -337,14 +370,15 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Expense by Category Donut Chart (5 cols) */}
-        <div className="lg:col-span-5 bg-[#12161A]/85 backdrop-blur-md border border-[#1F242C] rounded-2xl p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-white">Expense by Category</h2>
-            <span className="text-xs text-[#8B949E]">{currentMonthName} {selectedYear}</span>
+        <div className="lg:col-span-5 glass-panel rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden">
+          <div className="absolute -bottom-16 -right-16 w-52 h-52 bg-[#00C853]/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="flex items-center justify-between mb-4 relative z-10">
+            <h2 className="text-sm font-semibold text-white tracking-tight">Expense by Category</h2>
+            <span className="text-xs text-[#94A3B8]">{currentMonthName} {selectedYear}</span>
           </div>
 
           {categorySpending.length > 0 ? (
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 my-auto">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 my-auto relative z-10">
               {/* Donut Chart with Center Text */}
               <div className="relative w-48 h-48 flex items-center justify-center shrink-0">
                 <ResponsiveContainer width="100%" height="100%">
@@ -353,8 +387,8 @@ export const Dashboard: React.FC = () => {
                       data={categorySpending}
                       cx="50%"
                       cy="50%"
-                      innerRadius={58}
-                      outerRadius={80}
+                      innerRadius={56}
+                      outerRadius={78}
                       paddingAngle={3}
                       dataKey="percentage"
                     >
@@ -362,7 +396,7 @@ export const Dashboard: React.FC = () => {
                         <Cell 
                           key={`cell-${index}`} 
                           fill={entry.categoryColor || CATEGORY_COLORS[index % CATEGORY_COLORS.length]} 
-                          stroke="#12161A"
+                          stroke="#0B130E"
                           strokeWidth={2}
                         />
                       ))}
@@ -371,10 +405,10 @@ export const Dashboard: React.FC = () => {
                 </ResponsiveContainer>
                 {/* Centered Total inside Donut */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <span className="text-white text-base font-bold leading-tight">
+                  <span className="text-white text-2xl font-extrabold text-glow-pearl leading-tight tracking-tight">
                     {formatCurrency(metrics.totalExpenses)}
                   </span>
-                  <span className="text-[#8B949E] text-[10px] leading-tight mt-0.5">
+                  <span className="text-[#94A3B8] text-[11px] font-medium leading-tight mt-0.5">
                     Total Expenses
                   </span>
                 </div>
@@ -386,23 +420,23 @@ export const Dashboard: React.FC = () => {
                   <div key={item.categoryName} className="flex items-center justify-between sm:justify-start gap-4 text-xs">
                     <div className="flex items-center gap-2">
                       <span 
-                        className="w-2.5 h-2.5 rounded-sm shrink-0" 
+                        className="w-2.5 h-2.5 rounded-sm shrink-0 shadow-sm" 
                         style={{ backgroundColor: item.categoryColor || CATEGORY_COLORS[idx % CATEGORY_COLORS.length] }} 
                       />
-                      <span className="text-[#D1D5DB] font-medium text-xs">{item.categoryName}</span>
+                      <span className="text-[#E2E8F0] font-medium text-xs">{item.categoryName}</span>
                     </div>
-                    <span className="text-[#8B949E] text-xs font-semibold ml-auto">{item.percentage}%</span>
+                    <span className="text-[#94A3B8] text-xs font-semibold ml-auto">{item.percentage}%</span>
                   </div>
                 ))}
               </div>
             </div>
           ) : (
-            <div className="h-56 flex flex-col items-center justify-center text-center p-4">
+            <div className="h-56 flex flex-col items-center justify-center text-center p-4 relative z-10">
               <CreditCard size={32} className="text-[#2D3748] mb-2" />
               <p className="text-xs text-[#8B949E]">No expense transactions for {currentMonthName} {selectedYear}</p>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="mt-3 text-xs text-[#00C853] hover:underline font-semibold"
+                className="mt-3 text-xs text-[#4EFA94] hover:underline font-semibold"
               >
                 + Add an expense
               </button>
@@ -413,36 +447,37 @@ export const Dashboard: React.FC = () => {
 
       {/* Financial Intelligence & Real-Time Insights */}
       {insights.length > 0 && (
-        <div className="bg-[#12161A]/85 backdrop-blur-md border border-[#1F242C] rounded-2xl p-5">
-          <div className="flex items-center justify-between mb-4">
+        <div className="glass-panel rounded-2xl p-5 relative overflow-hidden">
+          <div className="absolute -bottom-16 -right-16 w-52 h-52 bg-[#00C853]/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="flex items-center justify-between mb-4 relative z-10">
             <div className="flex items-center gap-2">
-              <Sparkles size={16} className="text-[#00C853]" />
-              <h2 className="text-sm font-semibold text-white">Financial Intelligence & Insights</h2>
+              <Sparkles size={16} className="text-[#4EFA94]" />
+              <h2 className="text-sm font-semibold text-white tracking-tight">Financial Intelligence & Insights</h2>
             </div>
-            <span className="text-xs text-[#8B949E]">{currentMonthName} {selectedYear}</span>
+            <span className="text-xs text-[#94A3B8]">{currentMonthName} {selectedYear}</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative z-10">
             {insights.map((insight, idx) => {
               const isPositive = insight.type === 'POSITIVE';
               const isWarning = insight.type === 'WARNING';
               const isDanger = insight.type === 'DANGER';
 
               const borderClass = isPositive 
-                ? 'border-[#00C853]/25 bg-[#00C853]/5' 
+                ? 'border-[#00C853]/30 hover:border-[#00C853]/50' 
                 : isWarning 
-                ? 'border-[#F59E0B]/25 bg-[#F59E0B]/5' 
+                ? 'border-[#F59E0B]/30 hover:border-[#F59E0B]/50' 
                 : isDanger 
-                ? 'border-[#EF4444]/25 bg-[#EF4444]/5' 
-                : 'border-[#3B82F6]/25 bg-[#3B82F6]/5';
+                ? 'border-[#EF4444]/30 hover:border-[#EF4444]/50' 
+                : 'border-[#3B82F6]/30 hover:border-[#3B82F6]/50';
 
               const badgeClass = isPositive
-                ? 'bg-[#00C853]/15 text-[#00C853]'
+                ? 'bg-[#00C853]/20 text-[#4EFA94] border border-[#00C853]/30'
                 : isWarning
-                ? 'bg-[#F59E0B]/15 text-[#F59E0B]'
+                ? 'bg-[#F59E0B]/20 text-[#FBBF24] border border-[#F59E0B]/30'
                 : isDanger
-                ? 'bg-[#EF4444]/15 text-[#EF4444]'
-                : 'bg-[#3B82F6]/15 text-[#60A5FA]';
+                ? 'bg-[#EF4444]/20 text-[#F87171] border border-[#EF4444]/30'
+                : 'bg-[#3B82F6]/20 text-[#60A5FA] border border-[#3B82F6]/30';
 
               const Icon = isPositive 
                 ? CheckCircle2 
@@ -455,12 +490,12 @@ export const Dashboard: React.FC = () => {
               return (
                 <div 
                   key={`${insight.title}-${idx}`} 
-                  className={`rounded-xl border p-4 flex flex-col justify-between transition-colors ${borderClass}`}
+                  className={`glass-inner rounded-xl p-4 flex flex-col justify-between transition-all hover:translate-y-[-1px] ${borderClass}`}
                 >
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-2">
                       <div className="flex items-center gap-2">
-                        <Icon size={16} className={isPositive ? 'text-[#00C853]' : isWarning ? 'text-[#F59E0B]' : isDanger ? 'text-[#EF4444]' : 'text-[#60A5FA]'} />
+                        <Icon size={16} className={isPositive ? 'text-[#4EFA94]' : isWarning ? 'text-[#FBBF24]' : isDanger ? 'text-[#F87171]' : 'text-[#60A5FA]'} />
                         <span className="text-xs font-bold text-white tracking-wide">{insight.title}</span>
                       </div>
                       {insight.metricHighlight && (
@@ -469,7 +504,7 @@ export const Dashboard: React.FC = () => {
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-[#9CA3AF] leading-relaxed">
+                    <p className="text-xs text-[#94A3B8] leading-relaxed">
                       {insight.description}
                     </p>
                   </div>
