@@ -113,13 +113,13 @@ export const Auth: React.FC<AuthProps> = ({ initialMode = 'login' }) => {
           username,
           password,
           currency: 'INR',
-        });
+        }, rememberMe);
         setSuccessMessage('Account created successfully! Redirecting...');
       } else {
         await login({
           email: cleanEmail,
           password,
-        });
+        }, rememberMe);
         setSuccessMessage('Authentication successful! Opening dashboard...');
       }
 

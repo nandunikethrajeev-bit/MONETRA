@@ -7,26 +7,19 @@ interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (credentials: { email?: string; username?: string; password: string }) => Promise<void>;
-  register: (data: { username?: string; email: string; password: string; fullName: string; currency?: string }) => Promise<void>;
+  login: (credentials: { email?: string; username?: string; password: string }, rememberMe?: boolean) => Promise<void>;
+  register: (data: { username?: string; email: string; password: string; fullName: string; currency?: string }, rememberMe?: boolean) => Promise<void>;
   logout: () => void;
-  updateProfile: (data: Partial<User>) => void;
+  updateProfile: (data: { fullName?: string; email?: string; currency?: string }) => Promise<User>;
+  changePassword: (data: { currentPassword: string; newPassword: string }) => Promise<void>;
 }
-
-const DEFAULT_REFERENCE_USER: User = {
-  id: 1,
-  username: 'niketh',
-  fullName: 'Niketh Rajeev',
-  email: 'nandunikethrajeev@gmail.com',
-  currency: 'INR',
-};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem('monetra_token'));
+  const [token, setToken] = useState<string | null>(() => api.getToken());
   const [user, setUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem('monetra_user');
+    const saved = localStorage.getItem('monetra_user') || sessionStorage.getItem('monetra_user');
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -34,26 +27,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return null;
       }
     }
-    return token ? null : DEFAULT_REFERENCE_USER;
+    return null;
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const logout = () => {
+    api.setToken(null);
+    setToken(null);
+    localStorage.removeItem('monetra_user');
+    sessionStorage.removeItem('monetra_user');
+    setUser(null);
+  };
+
   useEffect(() => {
+    api.setOnUnauthorized(() => {
+      logout();
+    });
+
     const verifyUser = async () => {
-      const savedToken = localStorage.getItem('monetra_token');
-      if (savedToken) {
+      const activeToken = api.getToken();
+      if (activeToken) {
         try {
           const remoteUser = await api.getCurrentUser();
           setUser(remoteUser);
-          localStorage.setItem('monetra_user', JSON.stringify(remoteUser));
+          if (localStorage.getItem('monetra_token')) {
+            localStorage.setItem('monetra_user', JSON.stringify(remoteUser));
+          } else {
+            sessionStorage.setItem('monetra_user', JSON.stringify(remoteUser));
+          }
+          setToken(activeToken);
         } catch (err) {
-          console.warn('Backend session check:', err);
-          // If token expired, clear invalid session
-          localStorage.removeItem('monetra_token');
-          localStorage.removeItem('monetra_user');
-          setToken(null);
-          setUser(DEFAULT_REFERENCE_USER);
+          console.warn('Session verification failed:', err);
+          logout();
         }
+      } else {
+        setUser(null);
       }
       setIsLoading(false);
     };
@@ -61,52 +69,51 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     verifyUser();
   }, []);
 
-  const login = async (credentials: { email?: string; username?: string; password: string }) => {
+  const login = async (credentials: { email?: string; username?: string; password: string }, rememberMe: boolean = true) => {
     setIsLoading(true);
     try {
-      const res = await api.login(credentials);
+      const res = await api.login(credentials, rememberMe);
       setUser(res.user);
       setToken(res.token);
-      localStorage.setItem('monetra_user', JSON.stringify(res.user));
-      localStorage.setItem('monetra_token', res.token);
+      if (rememberMe) {
+        localStorage.setItem('monetra_user', JSON.stringify(res.user));
+      } else {
+        sessionStorage.setItem('monetra_user', JSON.stringify(res.user));
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
-  const register = async (data: { username?: string; email: string; password: string; fullName: string; currency?: string }) => {
+  const register = async (data: { username?: string; email: string; password: string; fullName: string; currency?: string }, rememberMe: boolean = true) => {
     setIsLoading(true);
     try {
-      const res = await api.register({
-        username: data.username || data.email.split('@')[0],
-        email: data.email,
-        password: data.password,
-        fullName: data.fullName,
-        currency: data.currency || 'INR',
-      });
+      const res = await api.register(data, rememberMe);
       setUser(res.user);
       setToken(res.token);
-      localStorage.setItem('monetra_user', JSON.stringify(res.user));
-      localStorage.setItem('monetra_token', res.token);
+      if (rememberMe) {
+        localStorage.setItem('monetra_user', JSON.stringify(res.user));
+      } else {
+        sessionStorage.setItem('monetra_user', JSON.stringify(res.user));
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
-  const logout = () => {
-    api.setToken(null);
-    setToken(null);
-    localStorage.removeItem('monetra_token');
-    localStorage.removeItem('monetra_user');
-    setUser(DEFAULT_REFERENCE_USER);
+  const updateProfile = async (data: { fullName?: string; email?: string; currency?: string }): Promise<User> => {
+    const updatedUser = await api.updateProfile(data);
+    setUser(updatedUser);
+    if (localStorage.getItem('monetra_token')) {
+      localStorage.setItem('monetra_user', JSON.stringify(updatedUser));
+    } else {
+      sessionStorage.setItem('monetra_user', JSON.stringify(updatedUser));
+    }
+    return updatedUser;
   };
 
-  const updateProfile = (updated: Partial<User>) => {
-    if (user) {
-      const newUser = { ...user, ...updated };
-      setUser(newUser);
-      localStorage.setItem('monetra_user', JSON.stringify(newUser));
-    }
+  const changePassword = async (data: { currentPassword: string; newPassword: string }): Promise<void> => {
+    await api.changePassword(data);
   };
 
   return (
@@ -114,12 +121,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         user,
         token,
-        isAuthenticated: !!token,
+        isAuthenticated: !!token && !!user,
         isLoading,
         login,
         register,
         logout,
         updateProfile,
+        changePassword,
       }}
     >
       {children}

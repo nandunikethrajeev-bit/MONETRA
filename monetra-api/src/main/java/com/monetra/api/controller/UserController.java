@@ -1,6 +1,7 @@
 package com.monetra.api.controller;
 
 import com.monetra.api.security.UserContext;
+import com.monetra.core.dto.PasswordChangeDto;
 import com.monetra.core.dto.UserDto;
 import com.monetra.core.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +32,14 @@ public class UserController {
     public ResponseEntity<UserDto> updateProfile(@RequestBody UserDto dto) {
         Long userId = UserContext.getRequiredUserId();
         return ResponseEntity.ok(userService.updateProfile(userId, dto.getFullName(), dto.getEmail(), dto.getCurrency()));
+    }
+
+    @PutMapping("/password")
+    @Operation(summary = "Change user password")
+    public ResponseEntity<Void> changePassword(@RequestBody PasswordChangeDto dto) {
+        Long userId = UserContext.getRequiredUserId();
+        userService.changePassword(userId, dto.getCurrentPassword(), dto.getNewPassword());
+        return ResponseEntity.noContent().build();
     }
 }
 

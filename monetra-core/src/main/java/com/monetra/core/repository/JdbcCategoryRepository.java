@@ -127,4 +127,11 @@ public class JdbcCategoryRepository implements CategoryRepository {
         String sql = "DELETE FROM categories WHERE id = ? AND user_id = ? AND is_default = FALSE";
         jdbcTemplate.update(sql, id, userId);
     }
+
+    @Override
+    public boolean isCategoryInUse(Long categoryId) {
+        String sql = "SELECT COUNT(*) FROM transactions WHERE category_id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, categoryId);
+        return count != null && count > 0;
+    }
 }

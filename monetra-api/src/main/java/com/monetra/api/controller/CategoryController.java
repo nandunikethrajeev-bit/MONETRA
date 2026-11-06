@@ -37,6 +37,13 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.createCustomCategory(userId, dto));
     }
 
+    @PutMapping("/{id}")
+    @Operation(summary = "Update a user-created custom category")
+    public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id, @RequestBody CategoryCreateDto dto) {
+        Long userId = UserContext.getRequiredUserId();
+        return ResponseEntity.ok(categoryService.updateCustomCategory(id, userId, dto));
+    }
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a user-created custom category")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {

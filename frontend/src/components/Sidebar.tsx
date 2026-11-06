@@ -24,17 +24,20 @@ export const Sidebar: React.FC = () => {
     { name: 'Settings', path: '/settings', icon: Settings },
   ];
 
-  // Derive initials
   const initials = user?.fullName 
     ? user.fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
-    : 'NR';
+    : (user?.username ? user.username.substring(0, 2).toUpperCase() : 'US');
 
   return (
     <aside className="w-64 min-w-[16rem] bg-[#0E1217] border-r border-[#1B222B] flex flex-col justify-between h-screen sticky top-0 px-4 py-5 select-none z-30">
       <div>
         {/* Brand Header */}
-        <div className="flex items-center gap-3 px-3 mb-8 cursor-pointer" onClick={() => navigate('/dashboard')}>
-          <div className="w-8 h-8 rounded-full border-2 border-[#00C853] flex items-center justify-center bg-[#0B1A12]">
+        <div 
+          className="flex items-center gap-3 px-3 mb-8 cursor-pointer group" 
+          onClick={() => navigate('/dashboard')}
+          title="MONETRA Home"
+        >
+          <div className="w-8 h-8 rounded-full border-2 border-[#00C853] flex items-center justify-center bg-[#0B1A12] shadow-sm group-hover:border-[#10B981] transition-colors">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <path d="M7 17C7 10 12 5 18 5C18 12 13 17 7 17Z" fill="#00C853" />
               <path d="M7 17L15 9" stroke="#0B1A12" strokeWidth="2" strokeLinecap="round" />
@@ -54,7 +57,7 @@ export const Sidebar: React.FC = () => {
                 className={({ isActive }) =>
                   `flex items-center gap-3.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-[#00C853] text-white shadow-sm'
+                      ? 'bg-[#00C853] text-white shadow-sm font-semibold'
                       : 'text-[#8B949E] hover:text-white hover:bg-[#141A21]'
                   }`
                 }
@@ -67,33 +70,36 @@ export const Sidebar: React.FC = () => {
         </nav>
       </div>
 
-      {/* User Profile Pill at Bottom */}
+      {/* User Profile Pill at Bottom with Dedicated Logout Action */}
       <div className="pt-4 border-t border-[#1B222B]">
-        <div 
-          onClick={() => navigate('/settings')}
-          className="flex items-center justify-between p-2 rounded-lg hover:bg-[#141A21] cursor-pointer transition-colors group"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#00C853] text-white font-semibold flex items-center justify-center text-sm shrink-0">
+        <div className="flex items-center justify-between p-2 rounded-xl bg-[#12161A] border border-[#1F2630] hover:border-[#2D3540] transition-colors">
+          <div 
+            onClick={() => navigate('/settings')}
+            className="flex items-center gap-3 cursor-pointer truncate flex-1 mr-2"
+            title="View Profile Settings"
+          >
+            <div className="w-9 h-9 rounded-full bg-[#00C853] text-white font-bold flex items-center justify-center text-xs shrink-0 shadow">
               {initials}
             </div>
             <div className="truncate">
-              <div className="text-white text-sm font-medium leading-tight truncate">
-                {user?.fullName || 'Niketh Rajeev'}
+              <div className="text-white text-xs font-semibold leading-tight truncate">
+                {user?.fullName || user?.username || 'User'}
               </div>
-              <div className="text-[#8B949E] text-xs leading-tight">
-                Pro Account
+              <div className="text-[#8B949E] text-[11px] leading-tight truncate mt-0.5">
+                {user?.email || 'Pro Account'}
               </div>
             </div>
           </div>
+
           <button 
-            title="Sign out"
+            type="button"
+            title="Sign out of MONETRA"
             onClick={(e) => {
               e.stopPropagation();
               logout();
               navigate('/login');
             }}
-            className="text-[#8B949E] hover:text-[#EF4444] p-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+            className="text-[#8B949E] hover:text-[#EF4444] hover:bg-[#EF4444]/10 p-2 rounded-lg transition-colors shrink-0"
           >
             <LogOut size={16} />
           </button>
@@ -102,4 +108,3 @@ export const Sidebar: React.FC = () => {
     </aside>
   );
 };
-

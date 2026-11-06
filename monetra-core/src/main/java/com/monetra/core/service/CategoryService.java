@@ -52,12 +52,42 @@ public class CategoryService {
     }
 
     @Transactional
+    public CategoryDto updateCustomCategory(Long categoryId, Long userId, CategoryCreateDto dto) {
+        FinancialValidator.validateNotBlank(dto.getName(), "Category Name");
+
+        Category category = categoryRepository.findByIdAndUserId(categoryId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", categoryId));
+
+        if (category.isDefault()) {
+            throw new ValidationException("System default categories cannot be modified");
+        }
+
+        category.setName(dto.getName().trim());
+        if (dto.getType() != null) {
+            category.setType(dto.getType());
+        }
+        if (dto.getIcon() != null) {
+            category.setIcon(dto.getIcon());
+        }
+        if (dto.getColor() != null) {
+            category.setColor(dto.getColor());
+        }
+
+        categoryRepository.update(category);
+        return CategoryDto.fromEntity(category);
+    }
+
+    @Transactional
     public void deleteCustomCategory(Long categoryId, Long userId) {
         Category category = categoryRepository.findByIdAndUserId(categoryId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", categoryId));
 
         if (category.isDefault()) {
             throw new ValidationException("System default categories cannot be deleted");
+        }
+
+        if (categoryRepository.isCategoryInUse(categoryId)) {
+            throw new ValidationException("Cannot delete category '" + category.getName() + "' because it is linked to existing transactions.");
         }
 
         categoryRepository.delete(categoryId, userId);

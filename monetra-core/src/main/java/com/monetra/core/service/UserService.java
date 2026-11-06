@@ -127,5 +127,22 @@ public class UserService {
         userRepository.update(user);
         return UserDto.fromEntity(user);
     }
+
+    @Transactional
+    public void changePassword(Long userId, String currentPassword, String newPassword) {
+        FinancialValidator.validateNotBlank(currentPassword, "Current Password");
+        FinancialValidator.validateNotBlank(newPassword, "New Password");
+        FinancialValidator.validatePassword(newPassword);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+
+        if (!passwordService.matches(currentPassword, user.getPasswordHash())) {
+            throw new AuthenticationException("Current password does not match");
+        }
+
+        user.setPasswordHash(passwordService.hashPassword(newPassword));
+        userRepository.update(user);
+    }
 }
 

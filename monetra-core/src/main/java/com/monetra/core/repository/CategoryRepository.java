@@ -12,5 +12,6 @@ public interface CategoryRepository {
     Category save(Category category);
     void update(Category category);
     void delete(Long id, Long userId);
+    boolean isCategoryInUse(Long categoryId);
 }
 

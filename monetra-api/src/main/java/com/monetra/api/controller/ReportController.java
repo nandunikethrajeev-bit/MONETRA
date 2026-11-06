@@ -32,9 +32,14 @@ public class ReportController {
 
     @GetMapping("/summary")
     @Operation(summary = "Get full dashboard financial summary", description = "Returns net worth, total income/expenses, monthly figures, budget usage, recent transactions, and insights")
-    public ResponseEntity<FinancialSummaryDto> getSummary() {
+    public ResponseEntity<FinancialSummaryDto> getSummary(
+            @RequestParam(required = false) Integer month,
+            @RequestParam(required = false) Integer year) {
         Long userId = UserContext.getRequiredUserId();
-        return ResponseEntity.ok(financialReportService.getFinancialSummary(userId));
+        LocalDate now = LocalDate.now();
+        int m = month != null ? month : now.getMonthValue();
+        int y = year != null ? year : now.getYear();
+        return ResponseEntity.ok(financialReportService.getFinancialSummary(userId, m, y));
     }
 
     @GetMapping("/category-spending")

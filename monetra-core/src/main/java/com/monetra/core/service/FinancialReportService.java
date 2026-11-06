@@ -38,10 +38,13 @@ public class FinancialReportService {
     }
 
     public FinancialSummaryDto getFinancialSummary(Long userId) {
+        LocalDate now = LocalDate.now();
+        return getFinancialSummary(userId, now.getMonthValue(), now.getYear());
+    }
+
+    public FinancialSummaryDto getFinancialSummary(Long userId, int month, int year) {
         FinancialSummaryDto summary = new FinancialSummaryDto();
         LocalDate now = LocalDate.now();
-        int month = now.getMonthValue();
-        int year = now.getYear();
 
         // Total Net Balance across accounts
         BigDecimal totalBalance = accountRepository.findByUserId(userId)
