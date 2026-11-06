@@ -365,3 +365,4 @@ The automated test suite covers all financial logic, validators, persistence, an
 - **Decimal Precision**: Monetary values use `DECIMAL(14,2)` in SQL and `BigDecimal` in Java with explicit rounding to prevent binary floating-point representation errors.
 - **SQL Injection Prevention**: All database operations use JDBC parameterized queries via Spring `JdbcTemplate`.
 - **Atomic Balance Updates**: Account balances are updated within database transactions when transactions are created, edited, or deleted.
+
