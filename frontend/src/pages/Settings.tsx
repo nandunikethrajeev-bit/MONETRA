@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  User, 
-  Lock, 
-  Sliders, 
-  Check, 
-  AlertCircle, 
-  Loader2, 
+import {
+  User,
+  Lock,
+  Sliders,
+  Check,
+  AlertCircle,
+  Loader2,
   LogOut,
   Eye,
   EyeOff
@@ -160,11 +160,10 @@ export const Settings: React.FC = () => {
         <div className="md:col-span-3 space-y-1.5">
           <button
             onClick={() => setActiveTab('profile')}
-            className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-              activeTab === 'profile'
+            className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${activeTab === 'profile'
                 ? 'bg-[#00C853] text-white shadow-sm'
                 : 'text-[#8B949E] hover:text-white hover:bg-[#141A21]'
-            }`}
+              }`}
           >
             <User size={16} />
             <span>Profile</span>
@@ -172,11 +171,10 @@ export const Settings: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('security')}
-            className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-              activeTab === 'security'
+            className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${activeTab === 'security'
                 ? 'bg-[#00C853] text-white shadow-sm'
                 : 'text-[#8B949E] hover:text-white hover:bg-[#141A21]'
-            }`}
+              }`}
           >
             <Lock size={16} />
             <span>Security</span>
@@ -184,11 +182,10 @@ export const Settings: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('preferences')}
-            className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-              activeTab === 'preferences'
+            className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${activeTab === 'preferences'
                 ? 'bg-[#00C853] text-white shadow-sm'
                 : 'text-[#8B949E] hover:text-white hover:bg-[#141A21]'
-            }`}
+              }`}
           >
             <Sliders size={16} />
             <span>Preferences</span>
