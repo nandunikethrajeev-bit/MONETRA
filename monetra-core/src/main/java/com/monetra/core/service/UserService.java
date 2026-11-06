@@ -32,6 +32,11 @@ public class UserService {
 
     @Transactional
     public UserDto register(RegisterRequest request) {
+        if (request.getUsername() == null || request.getUsername().trim().isEmpty()) {
+            if (request.getEmail() != null && request.getEmail().contains("@")) {
+                request.setUsername(request.getEmail().split("@")[0]);
+            }
+        }
         FinancialValidator.validateNotBlank(request.getUsername(), "Username");
         FinancialValidator.validateNotBlank(request.getFullName(), "Full Name");
         FinancialValidator.validateEmail(request.getEmail());
@@ -75,7 +80,9 @@ public class UserService {
         FinancialValidator.validateNotBlank(request.getUsername(), "Username");
         FinancialValidator.validateNotBlank(request.getPassword(), "Password");
 
-        User user = userRepository.findByUsername(request.getUsername().trim())
+        String identifier = request.getUsername().trim();
+        User user = userRepository.findByUsername(identifier)
+                .or(() -> userRepository.findByEmail(identifier))
                 .orElseThrow(() -> new AuthenticationException("Invalid username or password"));
 
         if (!passwordService.matches(request.getPassword(), user.getPasswordHash())) {

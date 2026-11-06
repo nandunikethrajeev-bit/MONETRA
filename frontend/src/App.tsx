@@ -1,14 +1,15 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 import { Sidebar } from './components/Sidebar';
+import { Welcome } from './pages/Welcome';
+import { Auth } from './pages/Auth';
 import { Dashboard } from './pages/Dashboard';
 import { Transactions } from './pages/Transactions';
 import { Categories } from './pages/Categories';
 import { Budgets } from './pages/Budgets';
 import { Reports } from './pages/Reports';
 import { Settings } from './pages/Settings';
-import { Login } from './pages/Login';
 
 const AppLayout: React.FC = () => {
   return (
@@ -28,17 +29,25 @@ export const App: React.FC = () => {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<AppLayout />}>
-            <Route index element={<Navigate to="/dashboard" replace />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="transactions" element={<Transactions />} />
-            <Route path="categories" element={<Categories />} />
-            <Route path="budgets" element={<Budgets />} />
-            <Route path="reports" element={<Reports />} />
-            <Route path="settings" element={<Settings />} />
+          {/* Public Welcome Landing Page */}
+          <Route path="/" element={<Welcome />} />
+
+          {/* Authentication Pages */}
+          <Route path="/login" element={<Auth initialMode="login" />} />
+          <Route path="/register" element={<Auth initialMode="register" />} />
+
+          {/* Core Application Protected Dashboard Routes */}
+          <Route element={<AppLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/transactions" element={<Transactions />} />
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/budgets" element={<Budgets />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/settings" element={<Settings />} />
           </Route>
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+
+          {/* Catch-all redirect to Welcome */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
@@ -46,4 +55,3 @@ export const App: React.FC = () => {
 };
 
 export default App;
-

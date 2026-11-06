@@ -8,12 +8,12 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (credentials: { email?: string; username?: string; password: string }) => Promise<void>;
-  register: (data: { username: string; email: string; password: string; fullName: string; currency?: string }) => Promise<void>;
+  register: (data: { username?: string; email: string; password: string; fullName: string; currency?: string }) => Promise<void>;
   logout: () => void;
   updateProfile: (data: Partial<User>) => void;
 }
 
-const DEFAULT_USER: User = {
+const DEFAULT_REFERENCE_USER: User = {
   id: 1,
   username: 'niketh',
   fullName: 'Niketh Rajeev',
@@ -24,11 +24,18 @@ const DEFAULT_USER: User = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem('monetra_token'));
   const [user, setUser] = useState<User | null>(() => {
     const saved = localStorage.getItem('monetra_user');
-    return saved ? JSON.parse(saved) : DEFAULT_USER;
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return null;
+      }
+    }
+    return token ? null : DEFAULT_REFERENCE_USER;
   });
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem('monetra_token'));
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -40,12 +47,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUser(remoteUser);
           localStorage.setItem('monetra_user', JSON.stringify(remoteUser));
         } catch (err) {
-          console.warn('Backend session expired or unreachable, using active profile:', err);
-          // Keep current user
-        }
-      } else {
-        if (!user) {
-          setUser(DEFAULT_USER);
+          console.warn('Backend session check:', err);
+          // If token expired, clear invalid session
+          localStorage.removeItem('monetra_token');
+          localStorage.removeItem('monetra_user');
+          setToken(null);
+          setUser(DEFAULT_REFERENCE_USER);
         }
       }
       setIsLoading(false);
@@ -61,45 +68,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(res.user);
       setToken(res.token);
       localStorage.setItem('monetra_user', JSON.stringify(res.user));
-    } catch (err) {
-      // In offline/demo fallback mode, still sign in with provided info
-      const mockUser: User = {
-        id: 1,
-        username: credentials.username || (credentials.email ? credentials.email.split('@')[0] : 'user'),
-        email: credentials.email || 'nandunikethrajeev@gmail.com',
-        fullName: 'Niketh Rajeev',
-        currency: 'INR',
-      };
-      setUser(mockUser);
-      setToken('demo-token');
-      localStorage.setItem('monetra_user', JSON.stringify(mockUser));
-      localStorage.setItem('monetra_token', 'demo-token');
-      throw err;
+      localStorage.setItem('monetra_token', res.token);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const register = async (data: { username: string; email: string; password: string; fullName: string; currency?: string }) => {
+  const register = async (data: { username?: string; email: string; password: string; fullName: string; currency?: string }) => {
     setIsLoading(true);
     try {
-      const res = await api.register(data);
+      const res = await api.register({
+        username: data.username || data.email.split('@')[0],
+        email: data.email,
+        password: data.password,
+        fullName: data.fullName,
+        currency: data.currency || 'INR',
+      });
       setUser(res.user);
       setToken(res.token);
       localStorage.setItem('monetra_user', JSON.stringify(res.user));
-    } catch (err) {
-      const fallbackUser: User = {
-        id: Date.now(),
-        username: data.username,
-        email: data.email,
-        fullName: data.fullName,
-        currency: data.currency || 'INR',
-      };
-      setUser(fallbackUser);
-      setToken('demo-token');
-      localStorage.setItem('monetra_user', JSON.stringify(fallbackUser));
-      localStorage.setItem('monetra_token', 'demo-token');
-      throw err;
+      localStorage.setItem('monetra_token', res.token);
     } finally {
       setIsLoading(false);
     }
@@ -110,7 +98,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(null);
     localStorage.removeItem('monetra_token');
     localStorage.removeItem('monetra_user');
-    setUser(null);
+    setUser(DEFAULT_REFERENCE_USER);
   };
 
   const updateProfile = (updated: Partial<User>) => {
@@ -126,7 +114,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         user,
         token,
-        isAuthenticated: !!token || !!user,
+        isAuthenticated: !!token,
         isLoading,
         login,
         register,
@@ -146,4 +134,3 @@ export const useAuth = () => {
   }
   return context;
 };
-
