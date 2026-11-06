@@ -393,3 +393,4 @@ export const Auth: React.FC<AuthProps> = ({ initialMode = 'login' }) => {
     </div>
   );
 };
+

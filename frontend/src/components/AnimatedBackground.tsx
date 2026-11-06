@@ -131,3 +131,4 @@ export const AnimatedBackground: React.FC<{ showMountains?: boolean; showGlow?: 
     </div>
   );
 };
+
