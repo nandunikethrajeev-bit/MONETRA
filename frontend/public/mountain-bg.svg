@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0a1210" />
+      <stop offset="35%" stop-color="#14211d" />
+      <stop offset="60%" stop-color="#1b2e27" />
+      <stop offset="85%" stop-color="#15241e" />
+      <stop offset="100%" stop-color="#0b110e" />
+    </linearGradient>
+    <linearGradient id="mistGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2d493f" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="#1c3029" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#0b110e" stop-opacity="0.9" />
+    </linearGradient>
+    <linearGradient id="mPeak1" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#3d5a4e" />
+      <stop offset="40%" stop-color="#233a31" />
+      <stop offset="100%" stop-color="#111c18" />
+    </linearGradient>
+    <linearGradient id="mPeak2" x1="70%" y1="0%" x2="30%" y2="100%">
+      <stop offset="0%" stop-color="#2a4238" />
+      <stop offset="50%" stop-color="#192b24" />
+      <stop offset="100%" stop-color="#0d1612" />
+    </linearGradient>
+    <linearGradient id="mPeak3" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#1d2e27" />
+      <stop offset="100%" stop-color="#0a100d" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="1000" fill="url(#skyGrad)" />
+
+  <!-- Subtle mist in sky -->
+  <ellipse cx="400" cy="380" rx="450" ry="200" fill="#2d4a3f" opacity="0.25" filter="blur(60px)" />
+
+  <!-- Far Distant Peaks -->
+  <polygon points="120,480 280,310 440,490 600,340 760,500 800,530 800,1000 0,1000 0,520" fill="#13221c" opacity="0.7" />
+
+  <!-- Mid Mountain Layer Left & Center -->
+  <polygon points="-50,680 180,410 320,530 460,360 620,540 850,380 850,1000 -50,1000" fill="url(#mPeak1)" />
+
+  <!-- Ridge highlights and shadows -->
+  <polygon points="460,360 460,360 380,550 490,620 520,580 460,360" fill="#4d7263" opacity="0.4" />
+  <polygon points="460,360 540,460 620,540 460,360" fill="#122019" opacity="0.6" />
+  <polygon points="180,410 240,490 320,530 180,410" fill="#15241d" opacity="0.65" />
+  <polygon points="180,410 110,520 70,620 180,410" fill="#426556" opacity="0.35" />
+
+  <!-- Atmosphere / Valley Mist -->
+  <rect y="460" width="800" height="180" fill="url(#mistGrad)" />
+
+  <!-- Front Dramatic Dark Mountain Ridge -->
+  <polygon points="-40,1000 -40,680 160,540 330,660 520,500 700,640 840,560 840,1000" fill="url(#mPeak2)" />
+  <polygon points="520,500 620,600 700,640 520,500" fill="#0d1612" opacity="0.8" />
+  <polygon points="520,500 420,620 330,660 520,500" fill="#304a3e" opacity="0.4" />
+
+  <!-- Foreground Silhouettes -->
+  <polygon points="-20,1000 -20,800 240,680 430,810 650,710 820,830 820,1000" fill="url(#mPeak3)" />
+
+  <!-- Bottom Dark Vignette -->
+  <rect y="700" width="800" height="300" fill="url(#skyGrad)" opacity="0.6" />
+</svg>
