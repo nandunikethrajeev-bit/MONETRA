@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: monetra-api
+  flyway:
+    enabled: false
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/monetra_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+monetra:
+  jwt:
+    secret: ${JWT_SECRET:monetra_secure_finance_system_key_2026_super_secret_token_1234567890}
+    validity-seconds: 86400
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: method
+
+logging:
+  level:
+    com.monetra: INFO
+    org.springframework.web: INFO
+    org.flywaydb: INFO
