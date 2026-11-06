@@ -5,3 +5,4 @@ public class DuplicateResourceException extends MonetraException {
         super(message);
     }
 }
+

@@ -74,3 +74,4 @@ public class SavingsGoalCreateDto {
         this.notes = notes;
     }
 }
+

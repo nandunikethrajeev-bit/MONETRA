@@ -35,3 +35,4 @@ public class ModernTable extends JTable {
         header.setReorderingAllowed(false);
     }
 }
+

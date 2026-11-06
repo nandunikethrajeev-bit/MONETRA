@@ -9,3 +9,4 @@ public class ResourceNotFoundException extends MonetraException {
         super(String.format("%s with id '%s' was not found", resourceName, id));
     }
 }
+

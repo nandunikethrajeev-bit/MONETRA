@@ -115,3 +115,4 @@ public class CategoriesView extends JPanel {
         dialog.setVisible(true);
     }
 }
+

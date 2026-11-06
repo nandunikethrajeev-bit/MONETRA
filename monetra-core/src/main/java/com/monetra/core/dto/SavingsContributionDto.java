@@ -40,3 +40,4 @@ public class SavingsContributionDto {
         this.note = note;
     }
 }
+

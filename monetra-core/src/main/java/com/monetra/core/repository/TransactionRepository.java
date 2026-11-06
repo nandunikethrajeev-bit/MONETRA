@@ -27,3 +27,4 @@ public interface TransactionRepository {
     List<CategorySpendingDto> getCategorySpendingBreakdown(Long userId, int month, int year);
     List<MonthlyTrendDto> getMonthlyTrends(Long userId, int monthsCount);
 }
+

@@ -15,3 +15,4 @@ public interface SavingsGoalRepository {
     void updateAmount(Long id, BigDecimal newCurrentAmount, GoalStatus newStatus);
     void delete(Long id, Long userId);
 }
+

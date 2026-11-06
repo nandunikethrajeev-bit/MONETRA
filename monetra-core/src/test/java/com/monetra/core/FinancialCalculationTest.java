@@ -109,3 +109,4 @@ class FinancialCalculationTest {
         assertThat(savingsRate).isEqualByComparingTo(new BigDecimal("70.44"));
     }
 }
+

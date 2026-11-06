@@ -73,3 +73,4 @@ public class MonthlyTrendDto {
         this.netSavings = netSavings;
     }
 }
+

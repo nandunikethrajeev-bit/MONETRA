@@ -48,3 +48,4 @@ public class DangerButton extends JButton {
         super.paintComponent(g);
     }
 }
+

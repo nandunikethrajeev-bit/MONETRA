@@ -55,3 +55,4 @@ public class FinancialInsightDto {
         this.metricHighlight = metricHighlight;
     }
 }
+

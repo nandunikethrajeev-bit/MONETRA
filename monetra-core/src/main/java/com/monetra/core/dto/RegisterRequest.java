@@ -59,3 +59,4 @@ public class RegisterRequest {
         this.currency = currency;
     }
 }
+

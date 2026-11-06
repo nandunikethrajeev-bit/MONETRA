@@ -13,3 +13,4 @@ public interface BudgetRepository {
     void update(Budget budget);
     void delete(Long id, Long userId);
 }
+

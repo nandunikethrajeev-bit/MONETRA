@@ -194,3 +194,4 @@ public class RecurringTransactionsView extends JPanel {
         }
     }
 }
+

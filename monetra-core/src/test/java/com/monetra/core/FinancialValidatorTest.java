@@ -67,3 +67,4 @@ class FinancialValidatorTest {
                 .hasMessageContaining("Start date cannot be after end date");
     }
 }
+

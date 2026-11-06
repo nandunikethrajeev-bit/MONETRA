@@ -5,3 +5,4 @@ public class UnauthorizedAccessException extends MonetraException {
         super(message);
     }
 }
+

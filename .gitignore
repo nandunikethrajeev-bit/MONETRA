@@ -1,34 +1,40 @@
+# Build targets
 target/
+**/target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Environment and Secrets
+.env
+.env.*
+.env.local
+!.env.example
+*.key
+*.pem
+*.secret
 
-### IntelliJ IDEA ###
-.idea
+# Tooling and Local Downloads
+.tools/
+*.log
+
+# IDE and Editor Files
+.idea/
 *.iws
 *.iml
 *.ipr
-
-### NetBeans ###
+.vscode/
+.classpath
+.project
+.settings/
+.springBeans
+.sts4-cache
+.apt_generated/
+.factorypath
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.built-jar-path
-
-### VS Code ###
-.vscode/
-
-### Tools and Local Environment ###
-.tools/
-*.log
-.env
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db

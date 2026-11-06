@@ -130,3 +130,4 @@ public class FinancialReportService {
         return transactionRepository.getMonthlyTrends(userId, months > 0 ? months : 6);
     }
 }
+

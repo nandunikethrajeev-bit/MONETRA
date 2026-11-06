@@ -247,3 +247,4 @@ public class BudgetsView extends JPanel {
         }
     }
 }
+

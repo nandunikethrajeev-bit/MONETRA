@@ -52,3 +52,4 @@ public class SecondaryButton extends JButton {
         super.paintComponent(g);
     }
 }
+

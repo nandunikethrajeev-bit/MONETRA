@@ -26,3 +26,4 @@ public class BudgetExceededException extends MonetraException {
         return newAmount;
     }
 }
+

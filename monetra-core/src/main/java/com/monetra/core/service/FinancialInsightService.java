@@ -172,3 +172,4 @@ public class FinancialInsightService {
         return insights;
     }
 }
+

@@ -13,3 +13,4 @@ public interface CategoryRepository {
     void update(Category category);
     void delete(Long id, Long userId);
 }
+

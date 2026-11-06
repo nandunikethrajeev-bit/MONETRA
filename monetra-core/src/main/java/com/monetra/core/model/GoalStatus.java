@@ -15,3 +15,4 @@ public enum GoalStatus {
         return displayName;
     }
 }
+

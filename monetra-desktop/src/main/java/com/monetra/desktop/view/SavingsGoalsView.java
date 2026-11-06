@@ -270,3 +270,4 @@ public class SavingsGoalsView extends JPanel {
         }
     }
 }
+

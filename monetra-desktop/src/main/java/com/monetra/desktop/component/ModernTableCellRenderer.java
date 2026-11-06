@@ -53,3 +53,4 @@ public class ModernTableCellRenderer extends DefaultTableCellRenderer {
         return c;
     }
 }
+

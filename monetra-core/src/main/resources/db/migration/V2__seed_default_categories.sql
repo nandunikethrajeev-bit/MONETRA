@@ -13,3 +13,4 @@ INSERT INTO categories (user_id, name, type, icon, color, is_default) VALUES
 (NULL, 'Housing', 'EXPENSE', 'home', '#6366F1', TRUE),
 (NULL, 'Utilities', 'EXPENSE', 'zap', '#EAB308', TRUE),
 (NULL, 'Other', 'EXPENSE', 'more-horizontal', '#64748B', TRUE);
+

@@ -200,3 +200,4 @@ public class ExpensesView extends JPanel {
         }
     }
 }
+

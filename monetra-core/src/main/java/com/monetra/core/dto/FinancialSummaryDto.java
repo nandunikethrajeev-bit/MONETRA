@@ -154,3 +154,4 @@ public class FinancialSummaryDto {
         this.insights = insights;
     }
 }
+

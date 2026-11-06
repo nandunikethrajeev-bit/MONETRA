@@ -34,3 +34,4 @@ public enum RecurrenceFrequency {
 
     public abstract LocalDate calculateNextDate(LocalDate currentDate);
 }
+

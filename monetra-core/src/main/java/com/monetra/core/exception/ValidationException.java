@@ -5,3 +5,4 @@ public class ValidationException extends MonetraException {
         super(message);
     }
 }
+

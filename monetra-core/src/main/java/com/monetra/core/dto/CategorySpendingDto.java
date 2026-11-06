@@ -73,3 +73,4 @@ public class CategorySpendingDto {
         this.percentage = percentage;
     }
 }
+

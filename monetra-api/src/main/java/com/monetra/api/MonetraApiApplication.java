@@ -12,3 +12,4 @@ public class MonetraApiApplication {
         SpringApplication.run(MonetraApiApplication.class, args);
     }
 }
+

@@ -70,3 +70,4 @@ public class ReportController {
         return ResponseEntity.ok(savingsCalculatorService.calculateRequiredSavings(request));
     }
 }
+

@@ -55,3 +55,4 @@ public class StatCard extends CardPanel {
         valueLabel.setForeground(color);
     }
 }
+

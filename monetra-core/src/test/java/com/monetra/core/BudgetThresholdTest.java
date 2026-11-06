@@ -53,3 +53,4 @@ class BudgetThresholdTest {
         assertThat(status.getAlertMessage()).contains("Exceeded by 150.00");
     }
 }
+

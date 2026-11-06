@@ -72,3 +72,4 @@ public class TransactionFilterDto {
         this.searchQuery = searchQuery;
     }
 }
+

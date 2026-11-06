@@ -48,3 +48,4 @@ public class StyledPasswordField extends JPasswordField {
         });
     }
 }
+

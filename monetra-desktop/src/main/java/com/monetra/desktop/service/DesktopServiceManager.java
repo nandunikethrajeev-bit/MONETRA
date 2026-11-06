@@ -103,3 +103,4 @@ public class DesktopServiceManager {
         return savingsCalculatorService;
     }
 }
+

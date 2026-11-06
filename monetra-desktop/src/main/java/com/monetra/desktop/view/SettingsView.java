@@ -237,3 +237,4 @@ public class SettingsView extends JPanel {
         dialog.setVisible(true);
     }
 }
+

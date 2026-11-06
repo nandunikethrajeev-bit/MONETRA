@@ -103,3 +103,4 @@ public class WhatIfSavingsCalculationResult {
         this.finalAccumulatedAmount = finalAccumulatedAmount;
     }
 }
+

@@ -9,3 +9,4 @@ public class MonetraException extends RuntimeException {
         super(message, cause);
     }
 }
+

@@ -33,3 +33,4 @@ public class UserController {
         return ResponseEntity.ok(userService.updateProfile(userId, dto.getFullName(), dto.getEmail(), dto.getCurrency()));
     }
 }
+

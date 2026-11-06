@@ -87,3 +87,4 @@ public class AccountService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
+

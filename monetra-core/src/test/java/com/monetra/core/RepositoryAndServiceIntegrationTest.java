@@ -161,3 +161,4 @@ class RepositoryAndServiceIntegrationTest {
         assertThat(summary.getInsights()).isNotEmpty();
     }
 }
+

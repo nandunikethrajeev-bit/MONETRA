@@ -14,3 +14,4 @@ public interface AccountRepository {
     void updateBalance(Long accountId, BigDecimal newBalance);
     void delete(Long id, Long userId);
 }
+

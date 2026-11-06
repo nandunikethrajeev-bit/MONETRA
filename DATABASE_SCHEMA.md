@@ -176,3 +176,4 @@ Database migrations are located in `monetra-core/src/main/resources/db/migration
 - **`V2__seed_default_categories.sql`**: Seeds 11 system categories (Salary, Freelancing, Food & Dining, Transportation, Shopping, Education, Entertainment, Healthcare, Housing, Utilities, Other).
 
 Migrations are applied automatically upon application startup across both MySQL and H2.
+

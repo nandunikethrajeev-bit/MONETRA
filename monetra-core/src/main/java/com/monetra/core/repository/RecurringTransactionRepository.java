@@ -15,3 +15,4 @@ public interface RecurringTransactionRepository {
     void updateNextDueDate(Long id, LocalDate nextDueDate, LocalDate lastProcessedDate);
     void delete(Long id, Long userId);
 }
+
