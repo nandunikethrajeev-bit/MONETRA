@@ -334,9 +334,79 @@ export const Transactions: React.FC = () => {
         </div>
       </div>
 
-      {/* Dense Transactions Table */}
+      {/* Dense Transactions Table / Mobile Card View */}
       <div className="bg-[#12161A] border border-[#1F242C] rounded-2xl overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
+        {/* Mobile Responsive Card List (visible on < md screens) */}
+        <div className="md:hidden divide-y divide-[#1F242C]">
+          {isLoading ? (
+            <div className="py-12 text-center text-[#8B949E]">
+              <Loader2 size={18} className="animate-spin text-[#00C853] mx-auto mb-2" />
+              <span className="text-xs">Loading records...</span>
+            </div>
+          ) : paginatedTransactions.length > 0 ? (
+            paginatedTransactions.map((tx) => {
+              const isIncome = tx.type === 'INCOME';
+              return (
+                <div key={tx.id} className="p-4 space-y-3 bg-[#12161A]/80">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${getCategoryBg(tx.categoryName)}`}>
+                        {getCategoryIcon(tx.categoryName)}
+                      </div>
+                      <div>
+                        <div className="text-white text-xs font-semibold">{tx.description}</div>
+                        <div className="text-[11px] text-[#8B949E]">{tx.categoryName || 'General'}</div>
+                      </div>
+                    </div>
+                    <span
+                      className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold ${
+                        isIncome
+                          ? 'bg-[#00C853]/15 text-[#00C853]'
+                          : 'bg-[#EF4444]/15 text-[#EF4444]'
+                      }`}
+                    >
+                      {isIncome ? 'Income' : 'Expense'}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-[11px] text-[#8B949E]">{formatDate(tx.transactionDate)}</span>
+                    <span className={`text-sm font-bold ${isIncome ? 'text-[#00C853]' : 'text-[#EF4444]'}`}>
+                      {formatSignedCurrency(tx.amount, tx.type)}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#1F242C]/60">
+                    <button
+                      onClick={() => {
+                        setEditingTransaction(tx);
+                        setIsModalOpen(true);
+                      }}
+                      className="flex items-center gap-1.5 text-[11px] text-[#8B949E] hover:text-white px-2.5 py-1.5 rounded-lg bg-[#181D23] border border-[#1F242C]"
+                    >
+                      <Edit2 size={12} />
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      onClick={() => setDeletingId(tx.id)}
+                      className="flex items-center gap-1.5 text-[11px] text-[#EF4444] hover:text-[#FF6B6B] px-2.5 py-1.5 rounded-lg bg-[#EF4444]/10 border border-[#EF4444]/20"
+                    >
+                      <Trash2 size={12} />
+                      <span>Delete</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="py-10 text-center text-[#8B949E] text-xs">
+              No transactions found matching criteria.
+            </div>
+          )}
+        </div>
+
+        {/* Desktop Table (visible on >= md screens) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-[#1F242C] text-[11px] font-semibold text-[#8B949E] uppercase tracking-wider bg-[#0E1217]">

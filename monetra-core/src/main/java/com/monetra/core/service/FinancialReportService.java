@@ -120,7 +120,7 @@ public class FinancialReportService {
         summary.setTopSpendingCategories(transactionRepository.getCategorySpendingBreakdown(userId, month, year));
 
         // Financial Insights
-        summary.setInsights(financialInsightService.generateInsights(userId));
+        summary.setInsights(financialInsightService.generateInsights(userId, month, year));
 
         return summary;
     }

@@ -63,9 +63,14 @@ public class ReportController {
 
     @GetMapping("/insights")
     @Operation(summary = "Get rule-based financial insights derived from actual stored database transactions")
-    public ResponseEntity<List<FinancialInsightDto>> getInsights() {
+    public ResponseEntity<List<FinancialInsightDto>> getInsights(
+            @RequestParam(required = false) Integer month,
+            @RequestParam(required = false) Integer year) {
         Long userId = UserContext.getRequiredUserId();
-        return ResponseEntity.ok(financialInsightService.generateInsights(userId));
+        LocalDate now = LocalDate.now();
+        int m = month != null ? month : now.getMonthValue();
+        int y = year != null ? year : now.getYear();
+        return ResponseEntity.ok(financialInsightService.generateInsights(userId, m, y));
     }
 
     @PostMapping("/what-if-calculator")

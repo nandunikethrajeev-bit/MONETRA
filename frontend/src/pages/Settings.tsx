@@ -157,10 +157,10 @@ export const Settings: React.FC = () => {
       {/* Settings Layout: Left sub-navigation & Right content */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
         {/* Left Sub-nav */}
-        <div className="md:col-span-3 space-y-1.5">
+        <div className="md:col-span-3 flex md:flex-col gap-1.5 overflow-x-auto pb-1 md:pb-0">
           <button
             onClick={() => setActiveTab('profile')}
-            className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${activeTab === 'profile'
+            className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${activeTab === 'profile'
                 ? 'bg-[#00C853] text-white shadow-sm'
                 : 'text-[#8B949E] hover:text-white hover:bg-[#141A21]'
               }`}
@@ -171,7 +171,7 @@ export const Settings: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('security')}
-            className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${activeTab === 'security'
+            className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${activeTab === 'security'
                 ? 'bg-[#00C853] text-white shadow-sm'
                 : 'text-[#8B949E] hover:text-white hover:bg-[#141A21]'
               }`}
@@ -182,7 +182,7 @@ export const Settings: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('preferences')}
-            className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${activeTab === 'preferences'
+            className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${activeTab === 'preferences'
                 ? 'bg-[#00C853] text-white shadow-sm'
                 : 'text-[#8B949E] hover:text-white hover:bg-[#141A21]'
               }`}

@@ -282,6 +282,14 @@ class ApiClient {
   async getMonthlyTrends(months: number = 6): Promise<MonthlyTrend[]> {
     return this.request<MonthlyTrend[]>(`/reports/monthly-trends?months=${months}`);
   }
+
+  async getInsights(month?: number, year?: number): Promise<import('../types').FinancialInsight[]> {
+    const query = new URLSearchParams();
+    if (month) query.append('month', month.toString());
+    if (year) query.append('year', year.toString());
+    const qs = query.toString() ? `?${query.toString()}` : '';
+    return this.request<import('../types').FinancialInsight[]>(`/reports/insights${qs}`);
+  }
 }
 
 export const api = new ApiClient();

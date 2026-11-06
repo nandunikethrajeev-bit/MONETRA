@@ -4,8 +4,11 @@ import com.monetra.core.dto.CategorySpendingDto;
 import com.monetra.core.dto.FinancialInsightDto;
 import com.monetra.core.dto.FinancialInsightDto.InsightType;
 import com.monetra.core.model.Budget;
+import com.monetra.core.model.User;
 import com.monetra.core.repository.BudgetRepository;
 import com.monetra.core.repository.TransactionRepository;
+import com.monetra.core.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,19 +22,54 @@ public class FinancialInsightService {
 
     private final TransactionRepository transactionRepository;
     private final BudgetRepository budgetRepository;
+    private final UserRepository userRepository;
 
     public FinancialInsightService(TransactionRepository transactionRepository, BudgetRepository budgetRepository) {
+        this(transactionRepository, budgetRepository, null);
+    }
+
+    @Autowired
+    public FinancialInsightService(TransactionRepository transactionRepository,
+                                  BudgetRepository budgetRepository,
+                                  @Autowired(required = false) UserRepository userRepository) {
         this.transactionRepository = transactionRepository;
         this.budgetRepository = budgetRepository;
+        this.userRepository = userRepository;
+    }
+
+    private String getCurrencySymbol(Long userId) {
+        if (userRepository != null && userId != null) {
+            return userRepository.findById(userId)
+                    .map(User::getCurrency)
+                    .map(this::symbolForCurrencyCode)
+                    .orElse("₹");
+        }
+        return "₹";
+    }
+
+    private String symbolForCurrencyCode(String code) {
+        if (code == null) return "₹";
+        switch (code.toUpperCase()) {
+            case "USD": return "$";
+            case "EUR": return "€";
+            case "GBP": return "£";
+            case "JPY": return "¥";
+            case "INR": return "₹";
+            default: return code + " ";
+        }
     }
 
     public List<FinancialInsightDto> generateInsights(Long userId) {
-        List<FinancialInsightDto> insights = new ArrayList<>();
         LocalDate now = LocalDate.now();
-        int currentMonth = now.getMonthValue();
-        int currentYear = now.getYear();
+        return generateInsights(userId, now.getMonthValue(), now.getYear());
+    }
 
-        LocalDate prevDate = now.minusMonths(1);
+    public List<FinancialInsightDto> generateInsights(Long userId, int currentMonth, int currentYear) {
+        List<FinancialInsightDto> insights = new ArrayList<>();
+        String sym = getCurrencySymbol(userId);
+
+        LocalDate currentPeriodDate = LocalDate.of(currentYear, currentMonth, 1);
+        LocalDate prevDate = currentPeriodDate.minusMonths(1);
         int prevMonth = prevDate.getMonthValue();
         int prevYear = prevDate.getYear();
 
@@ -47,18 +85,20 @@ public class FinancialInsightService {
             if (percentageChange.compareTo(BigDecimal.ZERO) < 0) {
                 insights.add(new FinancialInsightDto(
                         "Spending Reduced",
-                        String.format("Your expenses this month ($%s) are %s%% lower than last month ($%s). You are on track for higher savings!",
-                                curExpense.setScale(2, RoundingMode.HALF_UP),
+                        String.format("Your expenses this month (%s%s) are %s%% lower than last month (%s%s). You are on track for higher savings!",
+                                sym, curExpense.setScale(2, RoundingMode.HALF_UP),
                                 percentageChange.abs().toPlainString(),
-                                prevExpense.setScale(2, RoundingMode.HALF_UP)),
+                                sym, prevExpense.setScale(2, RoundingMode.HALF_UP)),
                         InsightType.POSITIVE,
                         "-" + percentageChange.abs().toPlainString() + "%"
                 ));
             } else if (percentageChange.compareTo(BigDecimal.valueOf(15)) > 0) {
                 insights.add(new FinancialInsightDto(
                         "Spending Spike Detected",
-                        String.format("Your spending this month is %s%% higher than last month. Review your non-essential discretionary expenses.",
-                                percentageChange.toPlainString()),
+                        String.format("Your spending this month (%s%s) is %s%% higher than last month (%s%s). Review your non-essential discretionary expenses.",
+                                sym, curExpense.setScale(2, RoundingMode.HALF_UP),
+                                percentageChange.toPlainString(),
+                                sym, prevExpense.setScale(2, RoundingMode.HALF_UP)),
                         InsightType.WARNING,
                         "+" + percentageChange.toPlainString() + "%"
                 ));
@@ -81,28 +121,28 @@ public class FinancialInsightService {
             if (savingsRate.compareTo(BigDecimal.valueOf(20)) >= 0) {
                 insights.add(new FinancialInsightDto(
                         "Strong Savings Rate",
-                        String.format("You are currently saving %s%% of your income this month ($%s saved), exceeding the recommended 20%% benchmark.",
+                        String.format("You are saving %s%% of your income this month (%s%s saved), exceeding the recommended 20%% benchmark.",
                                 savingsRate.toPlainString(),
-                                savings.setScale(2, RoundingMode.HALF_UP)),
+                                sym, savings.setScale(2, RoundingMode.HALF_UP)),
                         InsightType.POSITIVE,
                         savingsRate.toPlainString() + "% Saved"
                 ));
             } else if (savingsRate.compareTo(BigDecimal.ZERO) > 0) {
                 insights.add(new FinancialInsightDto(
                         "Positive Savings Rate",
-                        String.format("You are saving %s%% of your income this month ($%s). Aim to reach 20%% by cutting small discretionary purchases.",
+                        String.format("You are saving %s%% of your income this month (%s%s). Aim to reach 20%% by cutting small discretionary purchases.",
                                 savingsRate.toPlainString(),
-                                savings.setScale(2, RoundingMode.HALF_UP)),
+                                sym, savings.setScale(2, RoundingMode.HALF_UP)),
                         InsightType.INFO,
                         savingsRate.toPlainString() + "% Saved"
                 ));
             } else {
                 insights.add(new FinancialInsightDto(
                         "Deficit Warning",
-                        String.format("Expenses ($%s) exceed income ($%s) by $%s this month. Consider freezing non-essential expenses.",
-                                curExpense.setScale(2, RoundingMode.HALF_UP),
-                                curIncome.setScale(2, RoundingMode.HALF_UP),
-                                curExpense.subtract(curIncome).setScale(2, RoundingMode.HALF_UP)),
+                        String.format("Expenses (%s%s) exceed income (%s%s) by %s%s this month. Consider freezing non-essential expenses.",
+                                sym, curExpense.setScale(2, RoundingMode.HALF_UP),
+                                sym, curIncome.setScale(2, RoundingMode.HALF_UP),
+                                sym, curExpense.subtract(curIncome).setScale(2, RoundingMode.HALF_UP)),
                         InsightType.DANGER,
                         "Deficit"
                 ));
@@ -116,10 +156,10 @@ public class FinancialInsightService {
             if (topCat.getAmount().compareTo(BigDecimal.ZERO) > 0) {
                 insights.add(new FinancialInsightDto(
                         "Top Expense Category",
-                        String.format("%s represents %s%% of all your spending this month ($%s).",
+                        String.format("%s represents %s%% of all your spending this month (%s%s).",
                                 topCat.getCategoryName(),
                                 topCat.getPercentage().toPlainString(),
-                                topCat.getAmount().setScale(2, RoundingMode.HALF_UP)),
+                                sym, topCat.getAmount().setScale(2, RoundingMode.HALF_UP)),
                         topCat.getPercentage().compareTo(BigDecimal.valueOf(40)) > 0 ? InsightType.WARNING : InsightType.INFO,
                         topCat.getCategoryName()
                 ));
@@ -136,10 +176,10 @@ public class FinancialInsightService {
             if (spent.compareTo(b.getAmount()) > 0) {
                 insights.add(new FinancialInsightDto(
                         "Budget Overrun: " + b.getName(),
-                        String.format("You exceeded your budget of $%s by $%s (Current spent: $%s).",
-                                b.getAmount().setScale(2, RoundingMode.HALF_UP),
-                                spent.subtract(b.getAmount()).setScale(2, RoundingMode.HALF_UP),
-                                spent.setScale(2, RoundingMode.HALF_UP)),
+                        String.format("You exceeded your budget of %s%s by %s%s (Current spent: %s%s).",
+                                sym, b.getAmount().setScale(2, RoundingMode.HALF_UP),
+                                sym, spent.subtract(b.getAmount()).setScale(2, RoundingMode.HALF_UP),
+                                sym, spent.setScale(2, RoundingMode.HALF_UP)),
                         InsightType.DANGER,
                         "Exceeded"
                 ));
@@ -148,10 +188,10 @@ public class FinancialInsightService {
                 if (usage.compareTo(BigDecimal.valueOf(80)) >= 0) {
                     insights.add(new FinancialInsightDto(
                             "Budget Warning: " + b.getName(),
-                            String.format("You have consumed %s%% of your $%s budget limit ($%s remaining).",
+                            String.format("You have consumed %s%% of your %s%s budget limit (%s%s remaining).",
                                     usage.toPlainString(),
-                                    b.getAmount().setScale(2, RoundingMode.HALF_UP),
-                                    b.getAmount().subtract(spent).setScale(2, RoundingMode.HALF_UP)),
+                                    sym, b.getAmount().setScale(2, RoundingMode.HALF_UP),
+                                    sym, b.getAmount().subtract(spent).setScale(2, RoundingMode.HALF_UP)),
                             InsightType.WARNING,
                             usage.toPlainString() + "%"
                     ));
@@ -172,4 +212,3 @@ public class FinancialInsightService {
         return insights;
     }
 }
-

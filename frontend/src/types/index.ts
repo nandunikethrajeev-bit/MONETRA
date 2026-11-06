@@ -68,8 +68,17 @@ export interface CategorySpending {
   categoryId: number;
   categoryName: string;
   categoryColor?: string;
-  totalSpent: number;
+  categoryIcon?: string;
+  amount?: number;
+  totalSpent?: number;
   percentage: number;
+}
+
+export interface FinancialInsight {
+  title: string;
+  description: string;
+  type: 'POSITIVE' | 'WARNING' | 'DANGER' | 'INFO';
+  metricHighlight?: string;
 }
 
 export interface DashboardSummary {
@@ -81,5 +90,6 @@ export interface DashboardSummary {
   incomeTrend?: number;
   expensesTrend?: number;
   savingsTrend?: number;
+  insights?: FinancialInsight[];
 }
 

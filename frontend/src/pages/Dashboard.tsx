@@ -9,6 +9,9 @@ import {
   CreditCard,
   CheckCircle2,
   AlertCircle,
+  AlertTriangle,
+  Sparkles,
+  Info,
   Loader2
 } from 'lucide-react';
 import { 
@@ -25,7 +28,7 @@ import {
 import { formatCurrency } from '../utils/formatters';
 import { AddTransactionModal } from '../components/AddTransactionModal';
 import { api } from '../api/client';
-import { MonthlyTrend, CategorySpending, DashboardSummary } from '../types';
+import { MonthlyTrend, CategorySpending, DashboardSummary, FinancialInsight } from '../types';
 
 export const Dashboard: React.FC = () => {
   const [selectedMonth, setSelectedMonth] = useState<number>(() => new Date().getMonth() + 1);
@@ -40,6 +43,7 @@ export const Dashboard: React.FC = () => {
   });
   const [monthlyTrends, setMonthlyTrends] = useState<MonthlyTrend[]>([]);
   const [categorySpending, setCategorySpending] = useState<CategorySpending[]>([]);
+  const [insights, setInsights] = useState<FinancialInsight[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -64,10 +68,11 @@ export const Dashboard: React.FC = () => {
   const loadData = async (m = selectedMonth, y = selectedYear) => {
     setIsLoading(true);
     try {
-      const [summary, trends, cats] = await Promise.all([
+      const [summary, trends, cats, insightList] = await Promise.all([
         api.getSummary(m, y).catch(() => null),
         api.getMonthlyTrends(6).catch(() => []),
         api.getCategorySpending(m, y).catch(() => []),
+        api.getInsights(m, y).catch(() => []),
       ]);
 
       if (summary) {
@@ -85,6 +90,7 @@ export const Dashboard: React.FC = () => {
 
       setMonthlyTrends(trends || []);
       setCategorySpending(cats || []);
+      setInsights(insightList || []);
     } catch (err) {
       console.error('Error fetching dashboard metrics:', err);
     } finally {
@@ -404,6 +410,75 @@ export const Dashboard: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Financial Intelligence & Real-Time Insights */}
+      {insights.length > 0 && (
+        <div className="bg-[#12161A] border border-[#1F242C] rounded-2xl p-5">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Sparkles size={16} className="text-[#00C853]" />
+              <h2 className="text-sm font-semibold text-white">Financial Intelligence & Insights</h2>
+            </div>
+            <span className="text-xs text-[#8B949E]">{currentMonthName} {selectedYear}</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {insights.map((insight, idx) => {
+              const isPositive = insight.type === 'POSITIVE';
+              const isWarning = insight.type === 'WARNING';
+              const isDanger = insight.type === 'DANGER';
+
+              const borderClass = isPositive 
+                ? 'border-[#00C853]/25 bg-[#00C853]/5' 
+                : isWarning 
+                ? 'border-[#F59E0B]/25 bg-[#F59E0B]/5' 
+                : isDanger 
+                ? 'border-[#EF4444]/25 bg-[#EF4444]/5' 
+                : 'border-[#3B82F6]/25 bg-[#3B82F6]/5';
+
+              const badgeClass = isPositive
+                ? 'bg-[#00C853]/15 text-[#00C853]'
+                : isWarning
+                ? 'bg-[#F59E0B]/15 text-[#F59E0B]'
+                : isDanger
+                ? 'bg-[#EF4444]/15 text-[#EF4444]'
+                : 'bg-[#3B82F6]/15 text-[#60A5FA]';
+
+              const Icon = isPositive 
+                ? CheckCircle2 
+                : isWarning 
+                ? AlertTriangle 
+                : isDanger 
+                ? AlertCircle 
+                : Info;
+
+              return (
+                <div 
+                  key={`${insight.title}-${idx}`} 
+                  className={`rounded-xl border p-4 flex flex-col justify-between transition-colors ${borderClass}`}
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-2">
+                        <Icon size={16} className={isPositive ? 'text-[#00C853]' : isWarning ? 'text-[#F59E0B]' : isDanger ? 'text-[#EF4444]' : 'text-[#60A5FA]'} />
+                        <span className="text-xs font-bold text-white tracking-wide">{insight.title}</span>
+                      </div>
+                      {insight.metricHighlight && (
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeClass}`}>
+                          {insight.metricHighlight}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-[#9CA3AF] leading-relaxed">
+                      {insight.description}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Add Transaction Modal */}
       <AddTransactionModal

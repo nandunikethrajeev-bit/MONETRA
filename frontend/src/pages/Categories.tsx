@@ -191,18 +191,18 @@ export const Categories: React.FC = () => {
       )}
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-2 p-1 bg-[#12161A] border border-[#1F242C] rounded-xl w-fit">
+      <div className="flex items-center gap-1.5 p-1 bg-[#12161A] border border-[#1F242C] rounded-xl w-full sm:w-fit overflow-x-auto">
         {(['ALL', 'EXPENSE', 'INCOME'] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTypeFilter(t)}
-            className={`px-3.5 py-1.5 text-xs rounded-lg font-medium transition-all ${
+            className={`px-3 py-1.5 text-xs rounded-lg font-medium whitespace-nowrap transition-all ${
               typeFilter === t
                 ? 'bg-[#00C853] text-white font-semibold shadow'
                 : 'text-[#8B949E] hover:text-white'
             }`}
           >
-            {t === 'ALL' ? 'All Categories' : t === 'EXPENSE' ? 'Expense Categories' : 'Income Categories'}
+            {t === 'ALL' ? 'All' : t === 'EXPENSE' ? 'Expenses' : 'Income'}
           </button>
         ))}
       </div>

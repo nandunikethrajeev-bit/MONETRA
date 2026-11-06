@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Sidebar } from './components/Sidebar';
+import { AnimatedBackground } from './components/AnimatedBackground';
 import { Welcome } from './pages/Welcome';
 import { Auth } from './pages/Auth';
 import { Dashboard } from './pages/Dashboard';
@@ -32,11 +33,15 @@ const ProtectedRoute: React.FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#0B0E11] text-white">
-      {/* Persistent Left Sidebar */}
+    <div className="min-h-screen bg-[#0B0E11] text-white flex flex-col lg:flex-row relative">
+      {/* Restrained Atmospheric Dashboard Background */}
+      <AnimatedBackground variant="dashboard" />
+
+      {/* Navigation (Sticky Header on Mobile, Sidebar on Desktop) */}
       <Sidebar />
+
       {/* Main Content Area */}
-      <main className="flex-1 min-w-0 bg-[#0B0E11] p-6 lg:p-8 overflow-y-auto h-screen">
+      <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 overflow-y-auto min-h-[calc(100vh-4rem)] lg:h-screen relative z-10">
         <Outlet />
       </main>
     </div>

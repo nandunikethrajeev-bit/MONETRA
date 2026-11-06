@@ -10,35 +10,49 @@ interface Particle {
   delay: number;
 }
 
-export const AnimatedBackground: React.FC<{ showMountains?: boolean; showGlow?: boolean; glowPosition?: 'center' | 'right' }> = ({
+export interface AnimatedBackgroundProps {
+  variant?: 'cinematic' | 'auth' | 'dashboard';
+  showMountains?: boolean;
+  showGlow?: boolean;
+  glowPosition?: 'center' | 'right' | 'top';
+}
+
+export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
+  variant = 'cinematic',
   showMountains = true,
   showGlow = true,
-  glowPosition = 'right',
+  glowPosition,
 }) => {
   const [isPageVisible, setIsPageVisible] = useState<boolean>(true);
   const [particles, setParticles] = useState<Particle[]>([]);
 
+  const isDashboard = variant === 'dashboard';
+  const isAuth = variant === 'auth';
+
+  // Determine effective glow position
+  const effectiveGlowPos = glowPosition || (isDashboard ? 'center' : isAuth ? 'right' : 'right');
+
   useEffect(() => {
     // Generate low-density subtle emerald particles
-    const items: Particle[] = Array.from({ length: 18 }).map((_, i) => ({
+    const count = isDashboard ? 6 : isAuth ? 12 : 18;
+    const items: Particle[] = Array.from({ length: count }).map((_, i) => ({
       id: i,
-      x: Math.random() * 96 + 2, // 2% to 98%
-      y: Math.random() * 90 + 5, // 5% to 95%
-      size: Math.random() * 2.5 + 1.2, // 1.2px to 3.7px
-      opacity: Math.random() * 0.45 + 0.2, // 0.2 to 0.65
-      duration: Math.random() * 12 + 16, // 16s to 28s
-      delay: Math.random() * 8, // 0s to 8s
+      x: Math.random() * 96 + 2,
+      y: Math.random() * 90 + 5,
+      size: isDashboard ? Math.random() * 1.5 + 1 : Math.random() * 2.5 + 1.2,
+      opacity: isDashboard ? Math.random() * 0.18 + 0.08 : Math.random() * 0.45 + 0.2,
+      duration: Math.random() * 12 + 18,
+      delay: Math.random() * 8,
     }));
     setParticles(items);
 
-    // Pause animations on tab hidden
     const handleVisibilityChange = () => {
       setIsPageVisible(!document.hidden);
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, []);
+  }, [isDashboard, isAuth]);
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden select-none z-0" aria-hidden="true">
@@ -49,8 +63,12 @@ export const AnimatedBackground: React.FC<{ showMountains?: boolean; showGlow?: 
       {showGlow && (
         <div
           className={`absolute rounded-full blur-[140px] pointer-events-none transition-opacity duration-1000 ${
-            glowPosition === 'right'
+            effectiveGlowPos === 'right'
               ? 'right-[-10%] top-[25%] w-[650px] h-[650px] bg-[#00C853]/15'
+              : effectiveGlowPos === 'top'
+              ? 'left-1/2 -top-40 -translate-x-1/2 w-[700px] h-[450px] bg-[#00C853]/10'
+              : isDashboard
+              ? 'left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#00C853]/7'
               : 'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] bg-[#00C853]/12'
           } ${isPageVisible ? 'animate-ambient-glow' : 'opacity-10'}`}
         />
@@ -80,7 +98,13 @@ export const AnimatedBackground: React.FC<{ showMountains?: boolean; showGlow?: 
 
       {/* Multi-layered Atmospheric Mountains Parallax Silhouettes */}
       {showMountains && (
-        <div className="absolute bottom-0 left-0 right-0 h-[45vh] min-h-[300px] max-h-[550px] pointer-events-none overflow-hidden">
+        <div
+          className={`absolute bottom-0 left-0 right-0 pointer-events-none overflow-hidden ${
+            isDashboard
+              ? 'h-[28vh] min-h-[180px] max-h-[320px] opacity-25'
+              : 'h-[45vh] min-h-[300px] max-h-[550px]'
+          }`}
+        >
           {/* Subtle Emerald Valley Mist Back */}
           <div
             className={`absolute bottom-[18%] left-[-10%] right-[-10%] h-[180px] bg-gradient-to-t from-[#00C853]/10 via-[#10B981]/5 to-transparent blur-[50px] ${
@@ -131,4 +155,3 @@ export const AnimatedBackground: React.FC<{ showMountains?: boolean; showGlow?: 
     </div>
   );
 };
-
