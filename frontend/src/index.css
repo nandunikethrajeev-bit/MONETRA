@@ -39,11 +39,22 @@ body {
 @keyframes ambientGlow {
   0%, 100% {
     transform: translate(-50%, -50%) scale(1);
-    opacity: 0.18;
+    opacity: 0.16;
   }
   50% {
-    transform: translate(-48%, -52%) scale(1.12);
-    opacity: 0.28;
+    transform: translate(-49%, -51%) scale(1.08);
+    opacity: 0.26;
+  }
+}
+
+@keyframes ambientGlowRight {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.15;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.24;
   }
 }
 
@@ -52,7 +63,7 @@ body {
     transform: translateX(-5%) translateY(0);
   }
   50% {
-    transform: translateX(5%) translateY(-8px);
+    transform: translateX(5%) translateY(-6px);
   }
   100% {
     transform: translateX(-5%) translateY(0);
@@ -61,13 +72,13 @@ body {
 
 @keyframes mistDrift2 {
   0% {
-    transform: translateX(4%) translateY(0);
+    transform: translateX(5%) translateY(0);
   }
   50% {
-    transform: translateX(-4%) translateY(6px);
+    transform: translateX(-5%) translateY(6px);
   }
   100% {
-    transform: translateX(4%) translateY(0);
+    transform: translateX(5%) translateY(0);
   }
 }
 
@@ -76,14 +87,14 @@ body {
     transform: translateY(0) translateX(0);
     opacity: 0;
   }
-  15% {
-    opacity: 0.7;
+  20% {
+    opacity: var(--particle-opacity, 0.6);
   }
-  85% {
-    opacity: 0.7;
+  80% {
+    opacity: var(--particle-opacity, 0.6);
   }
   100% {
-    transform: translateY(-160px) translateX(25px);
+    transform: translateY(-240px) translateX(25px);
     opacity: 0;
   }
 }
@@ -93,7 +104,7 @@ body {
     transform: translateY(0) scale(1);
   }
   50% {
-    transform: translateY(-4px) scale(1.005);
+    transform: translateY(-4px) scale(1.004);
   }
 }
 
@@ -119,18 +130,27 @@ body {
 
 .animate-ambient-glow {
   animation: ambientGlow 14s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-ambient-glow-right {
+  animation: ambientGlowRight 14s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 .animate-mist-1 {
-  animation: mistDrift1 28s ease-in-out infinite;
+  animation: mistDrift1 26s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-mist-2 {
-  animation: mistDrift2 34s ease-in-out infinite;
+  animation: mistDrift2 32s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-gentle-sway {
-  animation: gentleSway 10s ease-in-out infinite;
+  animation: gentleSway 12s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-slow-pulse {

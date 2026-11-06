@@ -192,7 +192,7 @@ export const Dashboard: React.FC = () => {
       {/* 4 Financial Metric Cards (Real User Data) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Balance */}
-        <div className="bg-[#12161A] border border-[#1F242C] rounded-2xl p-5 flex flex-col justify-between hover:border-[#28323C] transition-colors">
+        <div className="bg-[#12161A]/85 backdrop-blur-md border border-[#1F242C] rounded-2xl p-5 flex flex-col justify-between hover:border-[#28323C] transition-colors">
           <div className="text-xs font-medium text-[#8B949E]">Total Balance</div>
           <div className="mt-3">
             <div className="text-2xl font-bold text-white tracking-tight">
@@ -206,7 +206,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Total Income */}
-        <div className="bg-[#12161A] border border-[#1F242C] rounded-2xl p-5 flex flex-col justify-between hover:border-[#28323C] transition-colors">
+        <div className="bg-[#12161A]/85 backdrop-blur-md border border-[#1F242C] rounded-2xl p-5 flex flex-col justify-between hover:border-[#28323C] transition-colors">
           <div className="text-xs font-medium text-[#8B949E]">Monthly Income</div>
           <div className="mt-3">
             <div className="text-2xl font-bold text-white tracking-tight">
@@ -220,7 +220,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Total Expenses */}
-        <div className="bg-[#12161A] border border-[#1F242C] rounded-2xl p-5 flex flex-col justify-between hover:border-[#28323C] transition-colors">
+        <div className="bg-[#12161A]/85 backdrop-blur-md border border-[#1F242C] rounded-2xl p-5 flex flex-col justify-between hover:border-[#28323C] transition-colors">
           <div className="text-xs font-medium text-[#8B949E]">Monthly Expenses</div>
           <div className="mt-3">
             <div className="text-2xl font-bold text-white tracking-tight">
@@ -234,7 +234,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Net Savings */}
-        <div className="bg-[#12161A] border border-[#1F242C] rounded-2xl p-5 flex flex-col justify-between hover:border-[#28323C] transition-colors">
+        <div className="bg-[#12161A]/85 backdrop-blur-md border border-[#1F242C] rounded-2xl p-5 flex flex-col justify-between hover:border-[#28323C] transition-colors">
           <div className="text-xs font-medium text-[#8B949E]">Net Savings</div>
           <div className="mt-3">
             <div className="text-2xl font-bold text-white tracking-tight">
@@ -251,7 +251,7 @@ export const Dashboard: React.FC = () => {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Income vs Expenses Chart (7 cols) */}
-        <div className="lg:col-span-7 bg-[#12161A] border border-[#1F242C] rounded-2xl p-5">
+        <div className="lg:col-span-7 bg-[#12161A]/85 backdrop-blur-md border border-[#1F242C] rounded-2xl p-5">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-sm font-semibold text-white">Income vs Expenses</h2>
             <div className="flex items-center gap-4 text-xs font-medium">
@@ -337,7 +337,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Expense by Category Donut Chart (5 cols) */}
-        <div className="lg:col-span-5 bg-[#12161A] border border-[#1F242C] rounded-2xl p-5 flex flex-col justify-between">
+        <div className="lg:col-span-5 bg-[#12161A]/85 backdrop-blur-md border border-[#1F242C] rounded-2xl p-5 flex flex-col justify-between">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold text-white">Expense by Category</h2>
             <span className="text-xs text-[#8B949E]">{currentMonthName} {selectedYear}</span>
@@ -413,7 +413,7 @@ export const Dashboard: React.FC = () => {
 
       {/* Financial Intelligence & Real-Time Insights */}
       {insights.length > 0 && (
-        <div className="bg-[#12161A] border border-[#1F242C] rounded-2xl p-5">
+        <div className="bg-[#12161A]/85 backdrop-blur-md border border-[#1F242C] rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Sparkles size={16} className="text-[#00C853]" />
